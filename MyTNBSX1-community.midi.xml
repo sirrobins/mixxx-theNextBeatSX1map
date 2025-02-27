@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <MixxxControllerPreset mixxxVersion="2.6+" schemaVersion="1">
     <info>
-        <name>TheNextBeatSX1-05</name>
+        <name>TheNextBeatSX1-community</name>
         <author>sirrobins</author>
         <description>Collaborative Map for TNB SX1</description>
     </info>
@@ -9,7 +9,7 @@
         <scriptfiles>
             <file filename="lodash.mixxx.js" functionprefix=""/>
             <file filename="midi-components-0.0.js" functionprefix=""/>
-            <file filename="MyTNBSX1-05-scripts.js" functionprefix="TheNextBeatSX1"/>
+            <file filename="MyTNBSX1-community-scripts.js" functionprefix="TheNextBeatSX1"/>
         </scriptfiles>
         <controls>
             <control>
