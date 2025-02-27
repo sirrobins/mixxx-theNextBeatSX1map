@@ -13,10 +13,12 @@ var TheNextBeatSX1 = {};
 // Tunable constants                                                  //
 ////////////////////////////////////////////////////////////////////////
 
-TheNextBeatSX1.JOG_SPIN_CUE_PEAK = 0.2; // [0.0, 1.0]
-TheNextBeatSX1.JOG_SPIN_CUE_EXPONENT = 0.7; // 1.0 = linear response
+//TheNextBeatSX1.JOG_SPIN_CUE_PEAK = 0.2; // [0.0, 1.0]
+TheNextBeatSX1.JOG_SPIN_CUE_PEAK = 0.8; // [0.0, 1.0]
+//TheNextBeatSX1.JOG_SPIN_CUE_EXPONENT = 0.3; // 1.0 = linear response
+TheNextBeatSX1.JOG_SPIN_CUE_EXPONENT = 0.9; // 1.0 = linear response
 
-TheNextBeatSX1.JOG_SPIN_PLAY_PEAK = 0.3; // [0.0, 1.0]
+TheNextBeatSX1.JOG_SPIN_PLAY_PEAK = 0.1; // [0.0, 1.0]
 TheNextBeatSX1.JOG_SPIN_PLAY_EXPONENT = 0.7; // 1.0 = linear response
 
 TheNextBeatSX1.JOG_SCRATCH_RPM = 33.333333; // 33 1/3
@@ -35,12 +37,16 @@ TheNextBeatSX1.JOG_SEEK_REVOLUTIONS = 2;
 
 // Controller constants
 TheNextBeatSX1.DECK_COUNT = 2;
-TheNextBeatSX1.JOG_RESOLUTION = 148; // measured/estimated
-TheNextBeatSX1.SHIFT_OFFSET = 0x1E;
+//TheNextBeatSX1.JOG_RESOLUTION = 148; // measured/estimated
+TheNextBeatSX1.JOG_RESOLUTION = 240; // SX1: 240 codes per 360 turn: measured/estimated
+TheNextBeatSX1.SHIFT_OFFSET = 0x1E;  // 1E hex: 30 decimal.
 
 
 // Jog constants
+// SX1 jog code: FF turn: 0x01 (1 dec). REWIND turn: 0x7F (127 dec.)
+// SX1: 0x40 = 64 (dec)
 TheNextBeatSX1.MIDI_JOG_DELTA_BIAS = 0x40; // center value of relative movements
+// SX1: not sure below value: 3F (hex) = 63 (dec)
 TheNextBeatSX1.MIDI_JOG_DELTA_RANGE = 0x3F; // both forward (= positive) and reverse (= negative)
 
 
@@ -76,7 +82,7 @@ TheNextBeatSX1.MIXXX_LOOP_POSITION_UNDEFINED = -1;
 TheNextBeatSX1.BUTTONMAP_CH0_CH1 = {
     load: [0x4B, 0x34],
     play: [0x4A, 0x4C],
-    cue: [0x3B, 0x42],
+    cue: [0x91, 0x92],
     sync: [0x44, 0x46],
 	search: [0x1A, 0x56],
 	scratch: [0x1B, 0x57],
@@ -575,7 +581,9 @@ TheNextBeatSX1.Deck.prototype.onJogTouch = function(channel, control, value) {
 
 TheNextBeatSX1.Deck.prototype.onJogSpin = function(channel, control, value) {
     var currentJogMode =  this.jogModeSelector.jogMode;
+	TheNextBeatSX1.logInfo("SX1 value for currentJogMode: " + currentJogMode);
     var jogDelta = TheNextBeatSX1.getJogDeltaValue(value);
+	TheNextBeatSX1.logInfo("SX1 value for jogDelta: " + jogDelta);
 
     if (currentJogMode === TheNextBeatSX1.JOGMODES.vinyl) {
         engine.scratchTick(this.number, jogDelta);
@@ -606,15 +614,17 @@ TheNextBeatSX1.Deck.prototype.onJogSpin = function(channel, control, value) {
         var direction;
         var scaledDeltaAbs;
         if (scaledDelta < 0.0) {
-            direction = -1.0;
+            direction = 1.0;
             scaledDeltaAbs = -scaledDelta;
         } else {
-            direction = 1.0;
+            direction = -1.0;
             scaledDeltaAbs = scaledDelta;
         }
         var scaledDeltaPow = direction * Math.pow(scaledDeltaAbs, jogExponent);
         var jogValue = TheNextBeatSX1.MIXXX_JOG_RANGE * scaledDeltaPow;
         this.setValue("jog", jogValue);
+		TheNextBeatSX1.logInfo("SX1 value for scaledDelta: " + scaledDelta);
+		TheNextBeatSX1.logInfo("SX1 value for direction: " + direction);
     } else {
         TheNextBeatSX1.logError("onJogSpin unknown mode error!");
     }

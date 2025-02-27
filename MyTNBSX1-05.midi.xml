@@ -12,15 +12,6 @@
             <file filename="MyTNBSX1-05-scripts.js" functionprefix="TheNextBeatSX1"/>
         </scriptfiles>
         <controls>
-           <control>
-                <group>[Master]</group>
-                <key>gain</key>
-                <status>0xB0</status>
-                <midino>0x17</midino>
-                <options>
-                    <normal/>
-                </options>
-            </control>
             <control>
                 <group>[Channel1]</group>
                 <key>keylock</key>
@@ -35,15 +26,6 @@
                 <key>TheNextBeatSX1.leftDeck.bendMinusButton.input</key>
                 <status>0x90</status>
                 <midino>0x03</midino>
-                <options>
-                    <script-binding/>
-                </options>
-            </control>
-            <control>
-                <group>[Channel1]</group>
-                <key>TheNextBeatSX1.leftDeck.bendPlusButton.input</key>
-                <status>0x90</status>
-                <midino>0x04</midino>
                 <options>
                     <script-binding/>
                 </options>
@@ -68,47 +50,11 @@
             </control>
             <control>
                 <group>[Channel1]</group>
-                <key>TheNextBeatSX1.fx1.knobs[1].input</key>
-                <status>0xB0</status>
-                <midino>0x07</midino>
-                <options>
-                    <script-binding/>
-                </options>
-            </control>
-            <control>
-                <group>[Master]</group>
-                <key>gain</key>
-                <status>0xB0</status>
-                <midino>0x08</midino>
-                <options>
-                    <normal/>
-                </options>
-            </control>
-            <control>
-                <group>[Channel1]</group>
                 <key>volume</key>
                 <status>0xB0</status>
                 <midino>0x08</midino>
                 <options>
                     <normal/>
-                </options>
-            </control>
-            <control>
-                <group>[Channel1]</group>
-                <key>TheNextBeatSX1.fx1.knobs[2].input</key>
-                <status>0xB0</status>
-                <midino>0x08</midino>
-                <options>
-                    <script-binding/>
-                </options>
-            </control>
-            <control>
-                <group>[Channel1]</group>
-                <key>TheNextBeatSX1.fx1.enableButtons[3].input</key>
-                <status>0x90</status>
-                <midino>0x09</midino>
-                <options>
-                    <script-binding/>
                 </options>
             </control>
             <control>
@@ -121,30 +67,12 @@
                 </options>
             </control>
             <control>
-                <group>[Channel1]</group>
-                <key>TheNextBeatSX1.fx1.knobs[3].input</key>
-                <status>0xB0</status>
-                <midino>0x09</midino>
-                <options>
-                    <script-binding/>
-                </options>
-            </control>
-            <control>
                 <group>[Master]</group>
                 <key>crossfader</key>
                 <status>0xB0</status>
                 <midino>0x0A</midino>
                 <options>
-                    <normal/>
-                </options>
-            </control>
-            <control>
-                <group>[Channel1]</group>
-                <key>TheNextBeatSX1.fx1.dryWetKnob.input</key>
-                <status>0xB0</status>
-                <midino>0x0A</midino>
-                <options>
-                    <script-binding/>
+                    <invert/>
                 </options>
             </control>
             <control>
@@ -276,10 +204,19 @@
                 </options>
             </control>
             <control>
-                <group>[EqualizerRack1_[Channel1]_Effect1]</group>
-                <key>button_parameter1</key>
-                <status>0x90</status>
+                <group>[Channel1]</group>
+                <key>TheNextBeatSX1.fx1.knobs[1].input</key>
+                <status>0xB0</status>
                 <midino>0x16</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Master]</group>
+                <key>gain</key>
+                <status>0xB0</status>
+                <midino>0x17</midino>
                 <options>
                     <normal/>
                 </options>
@@ -308,6 +245,7 @@
                 <status>0xB0</status>
                 <midino>0x19</midino>
                 <options>
+                    <invert/>
                     <script-binding/>
                 </options>
             </control>
@@ -870,6 +808,15 @@
                 </options>
             </control>
             <control>
+                <group>[Channel1]</group>
+                <key>TheNextBeatSX1.leftDeck.bendPlusButton.input</key>
+                <status>0x90</status>
+                <midino>0x53</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
                 <group>[Channel2]</group>
                 <key>TheNextBeatSX1.rightDeck.cueButton.input</key>
                 <status>0x90</status>
@@ -1131,16 +1078,16 @@
                 </options>
             </control>
             <control>
-                <group>[Channel2]</group>
-                <key>cue_play</key>
+                <group>[Channel1]</group>
+                <key>TheNextBeatSX1.fx1.enableButtons[3].input</key>
                 <status>0x90</status>
                 <midino>0x7F</midino>
                 <options>
-                    <normal/>
+                    <script-binding/>
                 </options>
             </control>
             <control>
-                <group>[Channel1]</group>
+                <group>[Channel2]</group>
                 <key>cue_play</key>
                 <status>0x90</status>
                 <midino>0x7F</midino>
@@ -1158,12 +1105,30 @@
                 </options>
             </control>
             <control>
-                <group>[EqualizerRack1_[Channel1]_Effect1]</group>
-                <key>button_parameter2</key>
-                <status>0x90</status>
+                <group>[Channel1]</group>
+                <key>TheNextBeatSX1.fx1.dryWetKnob.input</key>
+                <status>0xB0</status>
                 <midino>0x7F</midino>
                 <options>
-                    <normal/>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel1]</group>
+                <key>TheNextBeatSX1.fx1.knobs[2].input</key>
+                <status>0xB0</status>
+                <midino>0x7F</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel1]</group>
+                <key>TheNextBeatSX1.fx1.knobs[3].input</key>
+                <status>0xB0</status>
+                <midino>0x7F</midino>
+                <options>
+                    <script-binding/>
                 </options>
             </control>
             <control>
@@ -1261,6 +1226,13 @@
                 <key>button_parameter2</key>
                 <status>0x90</status>
                 <midino>0x51</midino>
+                <minimum>0.5</minimum>
+            </output>
+            <output>
+                <group>[Master]</group>
+                <key>headMix</key>
+                <status>0x90</status>
+                <midino>0x0D</midino>
                 <minimum>0.5</minimum>
             </output>
         </outputs>
