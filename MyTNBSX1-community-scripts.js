@@ -84,18 +84,24 @@ TheNextBeatSX1.BUTTONMAP_CH0_CH1 = {
     play: [0x4A, 0x4C],
     cue: [0x91, 0x92],
     sync: [0x44, 0x46],
-	search: [0x1A, 0x56],
-	scratch: [0x1B, 0x57],
+	search: [0x1A, 0x56], 
+	scratch: [0x48, 0x35],  // SX1: we assume vinyl button == scratch
 	fxdrywet: [0x1C, 0x58],
-    bendminus: [0x54, 0x56], // tempo -
-    bendplus: [0x53, 0x55], // tempo +
-	loopin: [0x0F, 0x4B],
+    bendminus: [0x74, 0x76], //SX1  tempo - ??
+    bendplus: [0x73, 0x75], // SX1 tempo + ??
+	loopin: [0x7F, 0x7B], //SX1   - ??
 	loopout: [0x10, 0x4C],
 	autoloop: [0x51, 0x0C],
-	loopactive: [0x12, 0x4E],
+	loopactive: [0x72, 0x7E], //SX1   - ??
     fx1assign: [0x27, 0x68],    //this is the shifted Activate 3 button
     fx2assign: [0x2C, 0x63],    //this is the shifted FX ON button
 	highkill: [0x14, 0x50],
+	// from this point, SX1 buttons map, not available in Dig jockey2
+	tempoUp: [0x53, 0x55], // SX1: bpm_up_small
+	tempoDown: [0x54, 0x56], // SX1: bpm_down_small
+	loopUp: [0x50, 0x0E], // SX1: loop_double
+	loopDown: [0x64, 0x65], // SX1: loop_halve
+	
 };
 
 // SX1: Not sure if this is userful in SX1
@@ -242,6 +248,34 @@ TheNextBeatSX1.AutoLoopButton.prototype = new components.Button({
     },
 });
 
+// SX1 added custom button: TEMPO +
+TheNextBeatSX1.tempoUpButton = function(options) {
+    components.Button.call(this, options);
+};
+TheNextBeatSX1.tempoUpButton.prototype = new components.Button({
+    outKey: "bpm_up_small",
+    unshift: function() {
+        this.inKey = "bpm_up_small";
+    },
+    shift: function() {
+        this.inKey = "bpm_up";
+    },
+});
+
+// SX1 added custom button: TEMPO -
+TheNextBeatSX1.tempoDownButton = function(options) {
+    components.Button.call(this, options);
+};
+TheNextBeatSX1.tempoDownButton.prototype = new components.Button({
+    outKey: "bpm_up_small",
+    unshift: function() {
+        this.inKey = "bpm_down_small";
+    },
+    shift: function() {
+        this.inKey = "bpm_down";
+    },
+});
+
 TheNextBeatSX1.LoopActiveButton = function(options) {
     components.Button.call(this, options);
 };
@@ -344,6 +378,11 @@ TheNextBeatSX1.Deck = function(number) {
     this.loopOutButton = new TheNextBeatSX1.LoopOutButton([0x90, TheNextBeatSX1.BUTTONMAP_CH0_CH1.loopout[number - 1]]);
     this.autoLoopButton = new TheNextBeatSX1.AutoLoopButton([0x90, TheNextBeatSX1.BUTTONMAP_CH0_CH1.autoloop[number - 1]]);
     this.loopActiveButton = new TheNextBeatSX1.LoopActiveButton([0x90, TheNextBeatSX1.BUTTONMAP_CH0_CH1.loopactive[number - 1]]);
+	
+	// SX1 added tempo + - buttons for bpm_down
+	this.tempoUpButton = new TheNextBeatSX1.tempoUpButton([0x90, TheNextBeatSX1.BUTTONMAP_CH0_CH1.tempoUp[number - 1]]);
+    this.tempoDownButton = new TheNextBeatSX1.tempoDownButton([0x90, TheNextBeatSX1.BUTTONMAP_CH0_CH1.tempoDown[number - 1]]);
+	
 
     //effect assignment switches
     this.fx1AssignmentButton = new components.EffectAssignmentButton({
