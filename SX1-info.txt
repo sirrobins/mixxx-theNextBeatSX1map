@@ -2,6 +2,14 @@
 SX1 sends 0x90 for push and 0x80 status for all buttons in Deck A/B.
 A different midi control code is sent by each button.
 Shift button 1/2 does not change the midi control sent by the main button pressed.
+The base shift implementation consists of generating (and map in xml) the midino unshifted code + 30 (in hex format)
+
+js constant that define the offset value:
+TheNextBeatSX1.SHIFT_OFFSET = 0x1E;  // 1E hex: 30 decimal.
+Example.:
+0x4F normal = 79 
+0x6D Shifted = 109
+(Offset is 30.)
 
 #  TNB SX control code map:
 BUTTONS:	
