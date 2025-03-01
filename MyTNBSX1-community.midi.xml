@@ -11,11 +11,31 @@
             <file filename="midi-components-0.0.js" functionprefix=""/>
             <file filename="MyTNBSX1-community-scripts.js" functionprefix="TheNextBeatSX1"/>
         </scriptfiles>
-        <controls>
+       <controls>
+            <control>
+                <group>[EqualizerRack1_[Channel2]_Effect1]</group>
+                <key>TheNextBeatSX1.rightDeck.highKillQuickEffectButton.input</key>
+                <description>SX1: N/A  RDJ2: x50</description>
+                <status>0x90</status>
+                <midino>0x00</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel1]</group>
+                <key>TheNextBeatSX1.fx1.effectFocusButton.input</key>
+                <description>SX1: N/A x0E in dj2</description>
+                <status>0x90</status>
+                <midino>0x00</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
             <control>
                 <group>[Channel2]</group>
                 <key>TheNextBeatSX1.rightDeck.cueButton.input</key>
-                <description>SX1: N/A x72 in DJ2 (no conflict)</description>
+                <description>SX1: N/A x53 in DJ2 (conflict)</description>
                 <status>0x90</status>
                 <midino>0x00</midino>
                 <options>
@@ -24,8 +44,8 @@
             </control>
             <control>
                 <group>[Channel2]</group>
-                <key>TheNextBeatSX1.rightDeck.loopOutButton.input</key>
-                <description>SX1: N/A x6a in dj2</description>
+                <key>TheNextBeatSX1.rightDeck.jogModeSelector.input</key>
+                <description>SX1: N/A D02 -- FX DRY/WET -- NOT AVAILABLE</description>
                 <status>0x90</status>
                 <midino>0x00</midino>
                 <options>
@@ -33,9 +53,9 @@
                 </options>
             </control>
             <control>
-                <group>[Channel2]</group>
-                <key>TheNextBeatSX1.rightDeck.loopInButton.input</key>
-                <description>SX1: N/A x69 in dj2</description>
+                <group>[EqualizerRack1_[Channel1]_Effect1]</group>
+                <key>TheNextBeatSX1.leftDeck.highKillQuickEffectButton.input</key>
+                <description>SX1: N/A DJ2: x14</description>
                 <status>0x90</status>
                 <midino>0x00</midino>
                 <options>
@@ -43,9 +63,39 @@
                 </options>
             </control>
             <control>
-                <group>[Channel2]</group>
-                <key>TheNextBeatSX1.rightDeck.loopInButton.input</key>
-                <description>SX1: N/A x4b in dj2</description>
+                <group>[Channel1]</group>
+                <key>TheNextBeatSX1.leftDeck.loopInButton.input</key>
+                <description>SX1: N/A x2d in dj2</description>
+                <status>0x90</status>
+                <midino>0x00</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel1]</group>
+                <key>TheNextBeatSX1.leftDeck.loopActiveButton.input</key>
+                <description>SX1: N/A x12 in dj2</description>
+                <status>0x90</status>
+                <midino>0x00</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel1]</group>
+                <key>TheNextBeatSX1.leftDeck.loopActiveButton.input</key>
+                <description>SX1: N/A x30 in dj2</description>
+                <status>0x90</status>
+                <midino>0x00</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel1]</group>
+                <key>TheNextBeatSX1.leftDeck.loopInButton.input</key>
+                <description>SX1: N/A x0f in dj2</description>
                 <status>0x90</status>
                 <midino>0x00</midino>
                 <options>
@@ -55,7 +105,7 @@
             <control>
                 <group>[Channel1]</group>
                 <key>TheNextBeatSX1.leftDeck.loopOutButton.input</key>
-                <description>SX1: N/A x10 in dj2</description>
+                <description>SX1: N/A x2e in dj2</description>
                 <status>0x90</status>
                 <midino>0x00</midino>
                 <options>
@@ -63,9 +113,99 @@
                 </options>
             </control>
             <control>
-                <group>[EqualizerRack1_[Channel2]_Effect1]</group>
-                <key>button_parameter2</key>
-                <description>SX1: Not available. future develop? x51 in DJ2</description>
+                <group>[Master]</group>
+                <key>TheNextBeatSX1.trax.traxButton.input</key>
+                <description>SX1: N/A</description>
+                <status>0x90</status>
+                <midino>0x00</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel2]</group>
+                <key>cue_play</key>
+                <description>SX1: N/A x53 in DJ2 (conflict)</description>
+                <status>0x90</status>
+                <midino>0x00</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel1]</group>
+                <key>TheNextBeatSX1.fx1.enableButtons[3].input</key>
+                <description>SX1: PENDING N/A</description>
+                <status>0x90</status>
+                <midino>0x00</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel2]</group>
+                <key>TheNextBeatSX1.fx2.enableButtons[1].input</key>
+                <description>SX1: PENDING N/A</description>
+                <status>0x90</status>
+                <midino>0x00</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel2]</group>
+                <key>TheNextBeatSX1.rightDeck.jogModeSelector.input</key>
+                <description>SX1: NA/ D02 Vinyl -- SEARCH SHIFT -- DJ2 value x56: comflict</description>
+                <status>0x90</status>
+                <midino>0x00</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel1]</group>
+                <key>TheNextBeatSX1.leftDeck.cueButton.input</key>
+                <description>SX1: N/A x36 in DJ2 (no conflict)</description>
+                <status>0x90</status>
+                <midino>0x00</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel2]</group>
+                <key>TheNextBeatSX1.rightDeck.playButton.input</key>
+                <description>SX1: PENDING N/A</description>
+                <status>0x90</status>
+                <midino>0x00</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel1]</group>
+                <key>TheNextBeatSX1.leftDeck.bendPlusButton.input</key>
+                <description>SX1: PENDING N/A</description>
+                <status>0x90</status>
+                <midino>0x00</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel1]</group>
+                <key>TheNextBeatSX1.leftDeck.cueButton.input</key>
+                <description>SxX1: PENDING DJ2: x18 pending research</description>
+                <status>0x90</status>
+                <midino>0x00</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel2]</group>
+                <key>cue_gotoandplay</key>
+                <description>SX1: N/A x35 in DJ2 (conflict)</description>
                 <status>0x90</status>
                 <midino>0x00</midino>
                 <options>
@@ -74,8 +214,18 @@
             </control>
             <control>
                 <group>[Channel2]</group>
+                <key>TheNextBeatSX1.rightDeck.bendPlusButton.input</key>
+                <description>SX1:  N/A x40 in RDJ2</description>
+                <status>0x90</status>
+                <midino>0x00</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel2]</group>
                 <key>TheNextBeatSX1.rightDeck.loopActiveButton.input</key>
-                <description>SX1: N/A x6c in dj2</description>
+                <description>SX1: N/A x4e in dj2</description>
                 <status>0x90</status>
                 <midino>0x00</midino>
                 <options>
@@ -95,7 +245,7 @@
             <control>
                 <group>[Channel2]</group>
                 <key>TheNextBeatSX1.rightDeck.loopActiveButton.input</key>
-                <description>SX1: N/A x4e in dj2</description>
+                <description>SX1: N/A x6c in dj2</description>
                 <status>0x90</status>
                 <midino>0x00</midino>
                 <options>
@@ -103,169 +253,19 @@
                 </options>
             </control>
             <control>
-                <group>[Channel2]</group>
-                <key>TheNextBeatSX1.rightDeck.bendPlusButton.input</key>
-                <description>SX1:  N/A</description>
-                <status>0x90</status>
-                <midino>0x00</midino>
-                <options>
-                    <script-binding/>
-                </options>
-            </control>
-            <control>
-                <group>[Channel2]</group>
-                <key>cue_gotoandplay</key>
-                <description>SX1: N/A x35 in DJ2 (conflict)</description>
+                <group>[EqualizerRack1_[Channel2]_Effect1]</group>
+                <key>button_parameter2</key>
+                <description>SX1: N/A x51 in DJ2</description>
                 <status>0x90</status>
                 <midino>0x00</midino>
                 <options>
                     <normal/>
-                </options>
-            </control>
-            <control>
-                <group>[Channel1]</group>
-                <key>TheNextBeatSX1.leftDeck.cueButton.input</key>
-                <description>SxX1: PENDING DJ2: x18 pending research</description>
-                <status>0x90</status>
-                <midino>0x00</midino>
-                <options>
-                    <script-binding/>
-                </options>
-            </control>
-            <control>
-                <group>[Channel1]</group>
-                <key>TheNextBeatSX1.leftDeck.bendPlusButton.input</key>
-                <description>SX1: PENDING N/A</description>
-                <status>0x90</status>
-                <midino>0x00</midino>
-                <options>
-                    <script-binding/>
-                </options>
-            </control>
-            <control>
-                <group>[Channel2]</group>
-                <key>TheNextBeatSX1.rightDeck.playButton.input</key>
-                <description>SX1: PENDING N/A</description>
-                <status>0x90</status>
-                <midino>0x00</midino>
-                <options>
-                    <script-binding/>
-                </options>
-            </control>
-            <control>
-                <group>[Channel1]</group>
-                <key>TheNextBeatSX1.leftDeck.cueButton.input</key>
-                <description>SX1: N/A x36 in DJ2 (no conflict)</description>
-                <status>0x90</status>
-                <midino>0x00</midino>
-                <options>
-                    <script-binding/>
-                </options>
-            </control>
-            <control>
-                <group>[Channel2]</group>
-                <key>TheNextBeatSX1.rightDeck.jogModeSelector.input</key>
-                <description>SX1: NA/ D02 Vinyl -- SEARCH SHIFT -- DJ2 value x56: comflict</description>
-                <status>0x90</status>
-                <midino>0x00</midino>
-                <options>
-                    <script-binding/>
-                </options>
-            </control>
-            <control>
-                <group>[Channel2]</group>
-                <key>TheNextBeatSX1.fx2.enableButtons[1].input</key>
-                <description>SX1: PENDING N/A</description>
-                <status>0x90</status>
-                <midino>0x00</midino>
-                <options>
-                    <script-binding/>
-                </options>
-            </control>
-            <control>
-                <group>[Channel1]</group>
-                <key>TheNextBeatSX1.fx1.enableButtons[3].input</key>
-                <description>SX1: PENDING N/A</description>
-                <status>0x90</status>
-                <midino>0x00</midino>
-                <options>
-                    <script-binding/>
-                </options>
-            </control>
-            <control>
-                <group>[Channel2]</group>
-                <key>cue_play</key>
-                <description>SX1: N/A x53 in DJ2 (conflict)</description>
-                <status>0x90</status>
-                <midino>0x00</midino>
-                <options>
-                    <normal/>
-                </options>
-            </control>
-            <control>
-                <group>[Master]</group>
-                <key>TheNextBeatSX1.trax.traxButton.input</key>
-                <description>SX1: N/A</description>
-                <status>0x90</status>
-                <midino>0x00</midino>
-                <options>
-                    <script-binding/>
                 </options>
             </control>
             <control>
                 <group>[Channel1]</group>
                 <key>TheNextBeatSX1.leftDeck.loopOutButton.input</key>
-                <description>SX1: N/A x2e in dj2</description>
-                <status>0x90</status>
-                <midino>0x00</midino>
-                <options>
-                    <script-binding/>
-                </options>
-            </control>
-            <control>
-                <group>[Channel1]</group>
-                <key>TheNextBeatSX1.leftDeck.loopInButton.input</key>
-                <description>SX1: N/A x0f in dj2</description>
-                <status>0x90</status>
-                <midino>0x00</midino>
-                <options>
-                    <script-binding/>
-                </options>
-            </control>
-            <control>
-                <group>[Channel1]</group>
-                <key>TheNextBeatSX1.leftDeck.loopActiveButton.input</key>
-                <description>SX1: N/A x30 in dj2</description>
-                <status>0x90</status>
-                <midino>0x00</midino>
-                <options>
-                    <script-binding/>
-                </options>
-            </control>
-            <control>
-                <group>[Channel1]</group>
-                <key>TheNextBeatSX1.leftDeck.loopActiveButton.input</key>
-                <description>SX1: N/A x12 in dj2</description>
-                <status>0x90</status>
-                <midino>0x00</midino>
-                <options>
-                    <script-binding/>
-                </options>
-            </control>
-            <control>
-                <group>[Channel1]</group>
-                <key>TheNextBeatSX1.leftDeck.loopInButton.input</key>
-                <description>SX1: N/A x2d in dj2</description>
-                <status>0x90</status>
-                <midino>0x00</midino>
-                <options>
-                    <script-binding/>
-                </options>
-            </control>
-            <control>
-                <group>[EqualizerRack1_[Channel1]_Effect1]</group>
-                <key>TheNextBeatSX1.leftDeck.highKillQuickEffectButton.input</key>
-                <description>SX1 PENDING DJ2: x14</description>
+                <description>SX1: N/A x10 in dj2</description>
                 <status>0x90</status>
                 <midino>0x00</midino>
                 <options>
@@ -274,8 +274,28 @@
             </control>
             <control>
                 <group>[Channel2]</group>
-                <key>TheNextBeatSX1.rightDeck.jogModeSelector.input</key>
-                <description>SX1: N/A D02 -- FX DRY/WET -- NOT AVAILABLE</description>
+                <key>TheNextBeatSX1.rightDeck.loopInButton.input</key>
+                <description>SX1: N/A x4b in dj2</description>
+                <status>0x90</status>
+                <midino>0x00</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel2]</group>
+                <key>TheNextBeatSX1.rightDeck.loopInButton.input</key>
+                <description>SX1: N/A x69 in dj2</description>
+                <status>0x90</status>
+                <midino>0x00</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel2]</group>
+                <key>TheNextBeatSX1.rightDeck.loopOutButton.input</key>
+                <description>SX1: N/A x6a in dj2</description>
                 <status>0x90</status>
                 <midino>0x00</midino>
                 <options>
@@ -285,7 +305,7 @@
             <control>
                 <group>[Channel2]</group>
                 <key>TheNextBeatSX1.rightDeck.cueButton.input</key>
-                <description>SX1: N/A x53 in DJ2 (conflict)</description>
+                <description>SX1: N/A x72 in DJ2 (no conflict)</description>
                 <status>0x90</status>
                 <midino>0x00</midino>
                 <options>
@@ -294,7 +314,68 @@
             </control>
             <control>
                 <group>[Channel1]</group>
-                <key>TheNextBeatSX1.fx1.dryWetKnob.input</key>
+                <key>TheNextBeatSX1.fx1.enableButtons[2].input</key>
+                <description>SX1: N/A x0C in dj2</description>
+                <status>0x90</status>
+                <midino>0x00</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel2]</group>
+                <key>TheNextBeatSX1.rightDeck.fx1AssignmentButton.input</key>
+                <description>SX1: N/A DJ2: x68</description>
+                <status>0x90</status>
+                <midino>0x00</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel2]</group>
+                <key>TheNextBeatSX1.rightDeck.fx2AssignmentButton.input</key>
+                <description>SX1: N/A DJ2: x63</description>
+                <status>0x90</status>
+                <midino>0x00</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[QuickEffectRack1_[Channel2]_Effect1]</group>
+                <key>TheNextBeatSX1.rightDeck.highKillQuickEffectButton.input</key>
+                <description>SX1: N/A  RDJ2: x6e</description>
+                <status>0x90</status>
+                <midino>0x00</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[EqualizerRack1_[Channel2]_Effect1]</group>
+                <key>button_parameter1</key>
+                <description>SX1: N/A x52 in RDJ2</description>
+                <status>0x90</status>
+                <midino>0x00</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+            <control>
+                <group>[QuickEffectRack1_[Channel1]_Effect1]</group>
+                <key>TheNextBeatSX1.leftDeck.highKillQuickEffectButton.input</key>
+                <description>SX1: N/A  RDJ2: x32</description>
+                <status>0x90</status>
+                <midino>0x00</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Library]</group>
+                <key>TheNextBeatSX1.trax.traxKnob.input</key>
+                <description>SX1: N/A DJ2: x13</description>
                 <status>0xB0</status>
                 <midino>0x00</midino>
                 <options>
@@ -302,8 +383,29 @@
                 </options>
             </control>
             <control>
-                <group>[Channel1]</group>
-                <key>TheNextBeatSX1.fx1.knobs[2].input</key>
+                <group>[EqualizerRack1_[Channel2]_Effect1]</group>
+                <key>parameter2</key>
+                <description>SX1: N/A x40 in RDJ2</description>
+                <status>0xB0</status>
+                <midino>0x00</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+            <control>
+                <group>[QuickEffectRack1_[Channel1]]</group>
+                <key>super1</key>
+                <description>SX1: N/A DJ2: x21</description>
+                <status>0xB0</status>
+                <midino>0x00</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+            <control>
+                <group>[Library]</group>
+                <key>TheNextBeatSX1.trax.traxKnob.input</key>
+                <description>SX1: N/A DJ2: x31</description>
                 <status>0xB0</status>
                 <midino>0x00</midino>
                 <options>
@@ -311,9 +413,19 @@
                 </options>
             </control>
             <control>
+                <group>[QuickEffectRack1_[Channel2]]</group>
+                <key>super1</key>
+                <description>SX1: N/A DJ2: x5d</description>
+                <status>0xB0</status>
+                <midino>0x00</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+            <control>
                 <group>[Channel1]</group>
-                <key>TheNextBeatSX1.fx1.knobs[3].input</key>
-                <description>SX1: PENDING N/A</description>
+                <key>TheNextBeatSX1.leftDeck.loopsizeKnob.input</key>
+                <description>SX1: N/A x28 in dj2</description>
                 <status>0xB0</status>
                 <midino>0x00</midino>
                 <options>
@@ -332,8 +444,46 @@
             </control>
             <control>
                 <group>[Channel1]</group>
-                <key>TheNextBeatSX1.leftDeck.loopsizeKnob.input</key>
-                <description>SX1: N/A x28 in dj2</description>
+                <key>TheNextBeatSX1.fx1.knobs[3].input</key>
+                <description>SX1: PENDING N/A</description>
+                <status>0xB0</status>
+                <midino>0x00</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel1]</group>
+                <key>TheNextBeatSX1.fx1.knobs[2].input</key>
+                <status>0xB0</status>
+                <midino>0x00</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel1]</group>
+                <key>TheNextBeatSX1.fx1.dryWetKnob.input</key>
+                <description>SX1: PENDING RESEARCH</description>
+                <status>0xB0</status>
+                <midino>0x00</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel2]</group>
+                <key>TheNextBeatSX1.rightDeck.onJogSpin</key>
+                <description>SX1: check error-- SHIFT -- previous x65</description>
+                <status>0xB0</status>
+                <midino>0x00</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel2]</group>
+                <key>TheNextBeatSX1.fx2.knobs[3].input</key>
                 <status>0xB0</status>
                 <midino>0x00</midino>
                 <options>
@@ -361,6 +511,7 @@
             <control>
                 <group>[EqualizerRack1_[Channel1]_Effect1]</group>
                 <key>parameter2</key>
+                <description>SX1: OK</description>
                 <status>0xB0</status>
                 <midino>0x04</midino>
                 <options>
@@ -370,6 +521,7 @@
             <control>
                 <group>[Channel1]</group>
                 <key>TheNextBeatSX1.fx1.enableButtons[1].input</key>
+                <description>SX1: N/A x07 in dj2</description>
                 <status>0x90</status>
                 <midino>0x07</midino>
                 <options>
@@ -397,19 +549,11 @@
             <control>
                 <group>[Master]</group>
                 <key>crossfader</key>
+                <description>SX1: OK</description>
                 <status>0xB0</status>
                 <midino>0x0A</midino>
                 <options>
                     <invert/>
-                </options>
-            </control>
-            <control>
-                <group>[Channel1]</group>
-                <key>TheNextBeatSX1.fx1.enableButtons[2].input</key>
-                <status>0x90</status>
-                <midino>0x0C</midino>
-                <options>
-                    <script-binding/>
                 </options>
             </control>
             <control>
@@ -443,8 +587,9 @@
                 </options>
             </control>
             <control>
-                <group>[Channel1]</group>
-                <key>TheNextBeatSX1.fx1.effectFocusButton.input</key>
+                <group>[Channel2]</group>
+                <key>TheNextBeatSX1.rightDeck.loopSizeUpButton.input</key>
+                <description>SX1: Added Button Loop Size +</description>
                 <status>0x90</status>
                 <midino>0x0E</midino>
                 <options>
@@ -454,6 +599,7 @@
             <control>
                 <group>[EqualizerRack1_[Channel1]_Effect1]</group>
                 <key>parameter3</key>
+                <description>SX1: OK</description>
                 <status>0xB0</status>
                 <midino>0x10</midino>
                 <options>
@@ -470,17 +616,9 @@
                 </options>
             </control>
             <control>
-                <group>[Library]</group>
-                <key>TheNextBeatSX1.trax.traxKnob.input</key>
-                <status>0xB0</status>
-                <midino>0x13</midino>
-                <options>
-                    <script-binding/>
-                </options>
-            </control>
-            <control>
                 <group>[EqualizerRack1_[Channel1]_Effect1]</group>
                 <key>parameter1</key>
+                <description>SX1: OK</description>
                 <status>0xB0</status>
                 <midino>0x14</midino>
                 <options>
@@ -545,6 +683,7 @@
             <control>
                 <group>[Master]</group>
                 <key>TheNextBeatSX1.trax.traxButton.input</key>
+                <description>SX1: N/A x1e in dj2</description>
                 <status>0x90</status>
                 <midino>0x1E</midino>
                 <options>
@@ -561,15 +700,6 @@
                 </options>
             </control>
             <control>
-                <group>[QuickEffectRack1_[Channel1]]</group>
-                <key>super1</key>
-                <status>0xB0</status>
-                <midino>0x21</midino>
-                <options>
-                    <normal/>
-                </options>
-            </control>
-            <control>
                 <group>[Library]</group>
                 <key>GoToItem</key>
                 <status>0x90</status>
@@ -581,6 +711,7 @@
             <control>
                 <group>[Channel1]</group>
                 <key>TheNextBeatSX1.fx1.enableButtons[1].input</key>
+                <description>SX1: N/A x25 in dj2</description>
                 <status>0x90</status>
                 <midino>0x25</midino>
                 <options>
@@ -626,7 +757,7 @@
             <control>
                 <group>[Channel1]</group>
                 <key>TheNextBeatSX1.leftDeck.onJogSpin</key>
-                <description>-- SHIFT --</description>
+                <description>SX1: pending usage-- SHIFT --</description>
                 <status>0xB0</status>
                 <midino>0x29</midino>
                 <options>
@@ -636,6 +767,7 @@
             <control>
                 <group>[Channel1]</group>
                 <key>TheNextBeatSX1.fx1.enableButtons[2].input</key>
+                <description>SX1: N/A x2A in dj2</description>
                 <status>0x90</status>
                 <midino>0x2A</midino>
                 <options>
@@ -647,24 +779,6 @@
                 <key>TheNextBeatSX1.leftDeck.fx2AssignmentButton.input</key>
                 <status>0x90</status>
                 <midino>0x2C</midino>
-                <options>
-                    <script-binding/>
-                </options>
-            </control>
-            <control>
-                <group>[Library]</group>
-                <key>TheNextBeatSX1.trax.traxKnob.input</key>
-                <status>0xB0</status>
-                <midino>0x31</midino>
-                <options>
-                    <script-binding/>
-                </options>
-            </control>
-            <control>
-                <group>[QuickEffectRack1_[Channel1]_Effect1]</group>
-                <key>TheNextBeatSX1.leftDeck.highKillQuickEffectButton.input</key>
-                <status>0x90</status>
-                <midino>0x32</midino>
                 <options>
                     <script-binding/>
                 </options>
@@ -740,6 +854,7 @@
             <control>
                 <group>[Channel1]</group>
                 <key>cue_default</key>
+                <description>SX1: OK</description>
                 <status>0x80</status>
                 <midino>0x3B</midino>
                 <options>
@@ -749,6 +864,7 @@
             <control>
                 <group>[Channel1]</group>
                 <key>cue_default</key>
+                <description>SX1: OK</description>
                 <status>0x90</status>
                 <midino>0x3B</midino>
                 <options>
@@ -776,6 +892,7 @@
             <control>
                 <group>[Channel2]</group>
                 <key>TheNextBeatSX1.rightDeck.bendMinusButton.input</key>
+                <description>SX1: N/A x3f in RDJ2</description>
                 <status>0x90</status>
                 <midino>0x3F</midino>
                 <options>
@@ -785,16 +902,8 @@
             <control>
                 <group>[Channel1]</group>
                 <key>pfl</key>
+                <description>SX1: OK</description>
                 <status>0x90</status>
-                <midino>0x40</midino>
-                <options>
-                    <normal/>
-                </options>
-            </control>
-            <control>
-                <group>[EqualizerRack1_[Channel2]_Effect1]</group>
-                <key>parameter2</key>
-                <status>0xB0</status>
                 <midino>0x40</midino>
                 <options>
                     <normal/>
@@ -883,15 +992,6 @@
             </control>
             <control>
                 <group>[Channel2]</group>
-                <key>TheNextBeatSX1.fx2.knobs[3].input</key>
-                <status>0xB0</status>
-                <midino>0x46</midino>
-                <options>
-                    <script-binding/>
-                </options>
-            </control>
-            <control>
-                <group>[Channel2]</group>
                 <key>pfl</key>
                 <status>0x90</status>
                 <midino>0x47</midino>
@@ -965,8 +1065,9 @@
                 </options>
             </control>
             <control>
-                <group>[EqualizerRack1_[Channel2]_Effect1]</group>
-                <key>TheNextBeatSX1.rightDeck.highKillQuickEffectButton.input</key>
+                <group>[Channel1]</group>
+                <key>TheNextBeatSX1.leftDeck.loopSizeUpButton.input</key>
+                <description>SX1: Added Button Loop Size +</description>
                 <status>0x90</status>
                 <midino>0x50</midino>
                 <options>
@@ -991,15 +1092,6 @@
                 <midino>0x52</midino>
                 <options>
                     <script-binding/>
-                </options>
-            </control>
-            <control>
-                <group>[EqualizerRack1_[Channel2]_Effect1]</group>
-                <key>button_parameter1</key>
-                <status>0x90</status>
-                <midino>0x52</midino>
-                <options>
-                    <normal/>
                 </options>
             </control>
             <control>
@@ -1033,7 +1125,7 @@
                 </options>
             </control>
             <control>
-                <group>[Channel1]</group>
+                <group>[Channel2]</group>
                 <key>TheNextBeatSX1.rightDeck.tempoDownButton.input</key>
                 <description>SX1: Added Button Tempo -</description>
                 <status>0x90</status>
@@ -1081,15 +1173,6 @@
                 </options>
             </control>
             <control>
-                <group>[QuickEffectRack1_[Channel2]]</group>
-                <key>super1</key>
-                <status>0xB0</status>
-                <midino>0x5D</midino>
-                <options>
-                    <normal/>
-                </options>
-            </control>
-            <control>
                 <group>[Channel2]</group>
                 <key>TheNextBeatSX1.fx2.enableButtons[2].input</key>
                 <status>0x90</status>
@@ -1117,10 +1200,11 @@
                 </options>
             </control>
             <control>
-                <group>[Channel2]</group>
-                <key>TheNextBeatSX1.rightDeck.fx2AssignmentButton.input</key>
+                <group>[Channel1]</group>
+                <key>TheNextBeatSX1.leftDeck.loopSizeDownButton.input</key>
+                <description>SX1: Added Button Loop Size -</description>
                 <status>0x90</status>
-                <midino>0x63</midino>
+                <midino>0x64</midino>
                 <options>
                     <script-binding/>
                 </options>
@@ -1128,6 +1212,7 @@
             <control>
                 <group>[Channel2]</group>
                 <key>TheNextBeatSX1.fx2.knobs[3].input</key>
+                <description>SX1: N/A x64 in RDJ2</description>
                 <status>0xB0</status>
                 <midino>0x64</midino>
                 <options>
@@ -1136,9 +1221,9 @@
             </control>
             <control>
                 <group>[Channel2]</group>
-                <key>TheNextBeatSX1.rightDeck.onJogSpin</key>
-                <description>-- SHIFT --</description>
-                <status>0xB0</status>
+                <key>TheNextBeatSX1.rightDeck.loopSizeDownButton.input</key>
+                <description>SX1: Added Button Loop Size -</description>
+                <status>0x90</status>
                 <midino>0x65</midino>
                 <options>
                     <script-binding/>
@@ -1154,29 +1239,11 @@
                 </options>
             </control>
             <control>
-                <group>[Channel2]</group>
-                <key>TheNextBeatSX1.rightDeck.fx1AssignmentButton.input</key>
-                <status>0x90</status>
-                <midino>0x68</midino>
-                <options>
-                    <script-binding/>
-                </options>
-            </control>
-            <control>
                 <group>[Channel1]</group>
                 <key>TheNextBeatSX1.leftDeck.loadButton.input</key>
                 <description>SX1: Load (SHIFT) </description>
                 <status>0x90</status>
                 <midino>0x69</midino>
-                <options>
-                    <script-binding/>
-                </options>
-            </control>
-            <control>
-                <group>[QuickEffectRack1_[Channel2]_Effect1]</group>
-                <key>TheNextBeatSX1.rightDeck.highKillQuickEffectButton.input</key>
-                <status>0x90</status>
-                <midino>0x6E</midino>
                 <options>
                     <script-binding/>
                 </options>
@@ -1202,7 +1269,7 @@
                 </options>
             </control>
             <control>
-                <group>[Channel1]</group>
+                <group>[Channel2]</group>
                 <key>TheNextBeatSX1.rightDeck.tempoDownButton.input</key>
                 <description>SX1: Added Button Tempo + SHIFT</description>
                 <status>0x90</status>
@@ -1212,7 +1279,7 @@
                 </options>
             </control>
             <control>
-                <group>[Channel1]</group>
+                <group>[Channel2]</group>
                 <key>TheNextBeatSX1.rightDeck.tempoDownButton.input</key>
                 <description>SX1: Added Button Tempo + SHIFT</description>
                 <status>0x90</status>
@@ -1231,16 +1298,9 @@
                 </options>
             </control>
             <control>
-                <group></group>
-                <key></key>
-                <status>0x00</status>
-                <options>
-                    <normal/>
-                </options>
-            </control>
-            <control>
                 <group>[Channel1]</group>
                 <key>rate</key>
+                <description>SX1: ?????</description>
                 <status>0xE0</status>
                 <options>
                     <normal/>
@@ -1336,4 +1396,3 @@
         </outputs>
     </controller>
 </MixxxControllerPreset>
-

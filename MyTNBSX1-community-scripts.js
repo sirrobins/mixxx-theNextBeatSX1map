@@ -84,23 +84,23 @@ TheNextBeatSX1.BUTTONMAP_CH0_CH1 = {
     play: [0x4A, 0x4C],
     cue: [0x91, 0x92],
     sync: [0x44, 0x46],
-	search: [0x1A, 0x56], 
+	search: [0x00, 0x00], // SX1: set to x00, (conflict with tempoDown  RDJ2 values: [0x1A, 0x56]
 	scratch: [0x48, 0x35],  // SX1: we assume vinyl button == scratch
 	fxdrywet: [0x1C, 0x58],
-    bendminus: [0x74, 0x76], //SX1  tempo - ??
-    bendplus: [0x73, 0x75], // SX1 tempo + ??
-	loopin: [0x7F, 0x7B], //SX1   - ??
-	loopout: [0x10, 0x4C],
+    bendminus: [0x00, 0x00], //SX1  tempo - ??
+    bendplus: [0x00, 0x00], // SX1 tempo + ??
+	loopin: [0x00, 0x00], //SX1   - ??
+	loopout: [0x00, 0x00], // SX1 set to x00, conflict with play.  RDJ2 values: [0x10, 0x4C]
 	autoloop: [0x51, 0x0C],
-	loopactive: [0x72, 0x7E], //SX1   - ??
+	loopactive: [0x00, 0x00], //SX1   - ??
     fx1assign: [0x27, 0x68],    //this is the shifted Activate 3 button
     fx2assign: [0x2C, 0x63],    //this is the shifted FX ON button
-	highkill: [0x14, 0x50],
+	highkill: [0x00, 0x00], //SX1 set to x00, (conflict with loopsizeUp. RDJ2 values: [0x14, 0x50]
 	// from this point, SX1 buttons map, not available in Dig jockey2
 	tempoUp: [0x53, 0x55], // SX1: bpm_up_small
 	tempoDown: [0x54, 0x56], // SX1: bpm_down_small
-	loopUp: [0x50, 0x0E], // SX1: loop_double
-	loopDown: [0x64, 0x65], // SX1: loop_halve
+	loopSizeUp: [0x50, 0x0E], // SX1: loop_double
+	loopSizeDown: [0x64, 0x65], // SX1: loop_halve
 	
 };
 
@@ -276,6 +276,40 @@ TheNextBeatSX1.tempoDownButton.prototype = new components.Button({
     },
 });
 
+// SX1 added custom button: LOOP DOUBLE
+TheNextBeatSX1.loopSizeUpButton = function(options) {
+    components.Button.call(this, options);
+};
+TheNextBeatSX1.loopSizeUpButton.prototype = new components.Button({
+    outKey: "loop_double",
+    unshift: function() {
+        this.inKey = "loop_double";
+    },
+    shift: function() {
+        this.inKey = "hotcue_1_activate";
+    },
+    shift2: function() {
+        this.inKey = "hotcue_1_clear";
+    },
+});
+
+// SX1 added custom button: LOOP HALVE
+TheNextBeatSX1.loopSizeDownButton = function(options) {
+    components.Button.call(this, options);
+};
+TheNextBeatSX1.loopSizeDownButton.prototype = new components.Button({
+    outKey: "loop_halve",
+    unshift: function() {
+        this.inKey = "loop_halve";
+    },
+    shift: function() {
+        this.inKey = "hotcue_3_activate";
+    },
+    shift2: function() {
+        this.inKey = "hotcue_3_clear";
+    },	
+});
+
 TheNextBeatSX1.LoopActiveButton = function(options) {
     components.Button.call(this, options);
 };
@@ -382,6 +416,13 @@ TheNextBeatSX1.Deck = function(number) {
 	// SX1 added tempo + - buttons for bpm_down
 	this.tempoUpButton = new TheNextBeatSX1.tempoUpButton([0x90, TheNextBeatSX1.BUTTONMAP_CH0_CH1.tempoUp[number - 1]]);
     this.tempoDownButton = new TheNextBeatSX1.tempoDownButton([0x90, TheNextBeatSX1.BUTTONMAP_CH0_CH1.tempoDown[number - 1]]);
+	
+	// SX1 added loopSize Up/Down + - buttons 
+	// UNSHIFT: Double/halve loop size
+	// SHIFT: HotCue 1, 3 set/go
+	// SHIFT: Unset HotCue 1, 3.
+	this.loopSizeUpButton = new TheNextBeatSX1.loopSizeUpButton([0x90, TheNextBeatSX1.BUTTONMAP_CH0_CH1.loopSizeUp[number - 1]]);
+    this.loopSizeDownButton = new TheNextBeatSX1.loopSizeDownButton([0x90, TheNextBeatSX1.BUTTONMAP_CH0_CH1.loopSizeDown[number - 1]]);	
 	
 
     //effect assignment switches
