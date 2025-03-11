@@ -6,29 +6,29 @@
 // Credits:    Uwe Klotz a/k/a tapir (baseline: Denon MC6000MK2 script)
 ////////////////////////////////////////////////////////////////////////
 
-var TheNextBeatSX1 = {};
+var TNBSX1 = {};
 
 
 ////////////////////////////////////////////////////////////////////////
 // Tunable constants                                                  //
 ////////////////////////////////////////////////////////////////////////
 
-//TheNextBeatSX1.JOG_SPIN_CUE_PEAK = 0.2; // [0.0, 1.0]
-TheNextBeatSX1.JOG_SPIN_CUE_PEAK = 0.8; // [0.0, 1.0]
-//TheNextBeatSX1.JOG_SPIN_CUE_EXPONENT = 0.3; // 1.0 = linear response
-TheNextBeatSX1.JOG_SPIN_CUE_EXPONENT = 0.9; // 1.0 = linear response
+//TNBSX1.JOG_SPIN_CUE_PEAK = 0.2; // [0.0, 1.0]
+TNBSX1.JOG_SPIN_CUE_PEAK = 0.8; // [0.0, 1.0]
+//TNBSX1.JOG_SPIN_CUE_EXPONENT = 0.3; // 1.0 = linear response
+TNBSX1.JOG_SPIN_CUE_EXPONENT = 0.9; // 1.0 = linear response
 
-TheNextBeatSX1.JOG_SPIN_PLAY_PEAK = 0.1; // [0.0, 1.0]
-TheNextBeatSX1.JOG_SPIN_PLAY_EXPONENT = 0.7; // 1.0 = linear response
+TNBSX1.JOG_SPIN_PLAY_PEAK = 0.1; // [0.0, 1.0]
+TNBSX1.JOG_SPIN_PLAY_EXPONENT = 0.7; // 1.0 = linear response
 
-TheNextBeatSX1.JOG_SCRATCH_RPM = 33.333333; // 33 1/3
-TheNextBeatSX1.JOG_SCRATCH_ALPHA = 0.125; // 1/8
-TheNextBeatSX1.JOG_SCRATCH_BETA = TheNextBeatSX1.JOG_SCRATCH_ALPHA / 32.0;
-TheNextBeatSX1.JOG_SCRATCH_RAMP = true; // required for back spins
+TNBSX1.JOG_SCRATCH_RPM = 33.333333; // 33 1/3
+TNBSX1.JOG_SCRATCH_ALPHA = 0.125; // 1/8
+TNBSX1.JOG_SCRATCH_BETA = TNBSX1.JOG_SCRATCH_ALPHA / 32.0;
+TNBSX1.JOG_SCRATCH_RAMP = true; // required for back spins
 
 // Seeking: Number of revolutions needed to seek from the beginning
 // to the end of the track.
-TheNextBeatSX1.JOG_SEEK_REVOLUTIONS = 2;
+TNBSX1.JOG_SEEK_REVOLUTIONS = 2;
 
 
 ////////////////////////////////////////////////////////////////////////
@@ -36,23 +36,26 @@ TheNextBeatSX1.JOG_SEEK_REVOLUTIONS = 2;
 ////////////////////////////////////////////////////////////////////////
 
 // Controller constants
-TheNextBeatSX1.DECK_COUNT = 2;
-//TheNextBeatSX1.JOG_RESOLUTION = 148; // measured/estimated
-TheNextBeatSX1.JOG_RESOLUTION = 240; // SX1: 240 codes per 360 turn: measured/estimated
-TheNextBeatSX1.SHIFT_OFFSET = 0x1E;  // 1E hex: 30 decimal.
+TNBSX1.DECK_COUNT = 2;
+//TNBSX1.JOG_RESOLUTION = 148; // measured/estimated
+//TNBSX1.JOG_RESOLUTION = 240; // SX1: 240 codes per 360 turn: measured/estimated
+// testing jogwheel smoother reaction:
+TNBSX1.JOG_RESOLUTION = 148; // SX1: 240 codes per 360 turn: measured/estimated
+TNBSX1.SHIFT_OFFSET = 0x1E;  // 1E hex: 30 decimal.
 
 
 // Jog constants
 // SX1 jog code: FF turn: 0x01 (1 dec). REWIND turn: 0x7F (127 dec.)
 // SX1: 0x40 = 64 (dec)
-TheNextBeatSX1.MIDI_JOG_DELTA_BIAS = 0x40; // center value of relative movements
+TNBSX1.MIDI_JOG_DELTA_BIAS = 0x40; // center value of relative movements
 // SX1: not sure below value: 3F (hex) = 63 (dec)
-TheNextBeatSX1.MIDI_JOG_DELTA_RANGE = 0x3F; // both forward (= positive) and reverse (= negative)
+TNBSX1.MIDI_JOG_DELTA_RANGE = 0x3F; // both forward (= positive) and reverse (= negative)
 
 
 // Mixxx constants
-TheNextBeatSX1.MIXXX_JOG_RANGE = 3.0;
-TheNextBeatSX1.MIXXX_LOOP_POSITION_UNDEFINED = -1;
+//TNBSX1.MIXXX_JOG_RANGE = 3.0;
+TNBSX1.MIXXX_JOG_RANGE = 1.0;
+TNBSX1.MIXXX_LOOP_POSITION_UNDEFINED = -1;
 
 
 ////////////////////////////////////////////////////////////////////////
@@ -79,7 +82,7 @@ TheNextBeatSX1.MIXXX_LOOP_POSITION_UNDEFINED = -1;
    Pending further analysis.
    
    */
-TheNextBeatSX1.BUTTONMAP_CH0_CH1 = {
+TNBSX1.BUTTONMAP_CH0_CH1 = {
     load: [0x4B, 0x34],
     play: [0x4A, 0x4C],
     cue: [0x91, 0x92],
@@ -105,7 +108,7 @@ TheNextBeatSX1.BUTTONMAP_CH0_CH1 = {
 };
 
 // SX1: Not sure if this is userful in SX1
-TheNextBeatSX1.KNOBMAP_CH0_CH1 = {
+TNBSX1.KNOBMAP_CH0_CH1 = {
     loopSize: [0x28, 0x63],     //this is the shifted Dry/Wet Knob
 };
 
@@ -114,22 +117,22 @@ TheNextBeatSX1.KNOBMAP_CH0_CH1 = {
 // Logging functions                                                  //
 ////////////////////////////////////////////////////////////////////////
 
-TheNextBeatSX1.logDebug = function(msg) {
-    if (TheNextBeatSX1.debug) {
-        print("[" + TheNextBeatSX1.id + " DEBUG] " + msg);
+TNBSX1.logDebug = function(msg) {
+    if (TNBSX1.debug) {
+        print("[" + TNBSX1.id + " DEBUG] " + msg);
     }
 };
 
-TheNextBeatSX1.logInfo = function(msg) {
-    print("[" + TheNextBeatSX1.id + " INFO] " + msg);
+TNBSX1.logInfo = function(msg) {
+    print("[" + TNBSX1.id + " INFO] " + msg);
 };
 
-TheNextBeatSX1.logWarning = function(msg) {
-    print("[" + TheNextBeatSX1.id + " WARNING] " + msg);
+TNBSX1.logWarning = function(msg) {
+    print("[" + TNBSX1.id + " WARNING] " + msg);
 };
 
-TheNextBeatSX1.logError = function(msg) {
-    print("[" + TheNextBeatSX1.id + " ERROR] " + msg);
+TNBSX1.logError = function(msg) {
+    print("[" + TNBSX1.id + " ERROR] " + msg);
 };
 
 
@@ -138,35 +141,35 @@ TheNextBeatSX1.logError = function(msg) {
 ////////////////////////////////////////////////////////////////////////
 
 // SX1: This seems the value code for outgoing midi on/off signals (leds on/off)
-TheNextBeatSX1.MIDI_ON = 0x7F;
-TheNextBeatSX1.MIDI_OFF = 0x00;
+TNBSX1.MIDI_ON = 0x7F;
+TNBSX1.MIDI_OFF = 0x00;
 
-TheNextBeatSX1.isButtonPressed = function(midiValue) {
+TNBSX1.isButtonPressed = function(midiValue) {
 	console.log("SX1: " + midiValue);
     switch (midiValue) {
 		
-    case TheNextBeatSX1.MIDI_ON:
+    case TNBSX1.MIDI_ON:
         return true;
-    case TheNextBeatSX1.MIDI_OFF:
+    case TNBSX1.MIDI_OFF:
         return false;
     default:
-        TheNextBeatSX1.logError("Unexpected MIDI button value: " + midiValue);
+        TNBSX1.logError("Unexpected MIDI button value: " + midiValue);
         return undefined;
     }
 };
 
 /* Custom buttons */
 
-TheNextBeatSX1.ShiftButton = function(options) {
+TNBSX1.ShiftButton = function(options) {
 	console.log("SX1: " + options);
     this.state = false;
     this.connectedContainers = [];
     components.Button.call(this, options);
 };
-TheNextBeatSX1.ShiftButton.prototype = new components.Button({
+TNBSX1.ShiftButton.prototype = new components.Button({
     input: function(channel, control, value) {
         //update shift state
-        this.state = TheNextBeatSX1.isButtonPressed(value);
+        this.state = TNBSX1.isButtonPressed(value);
         this.send(this.outValueScale(this.state));
 
         //call shift()/unshift() for each connected container
@@ -185,18 +188,65 @@ TheNextBeatSX1.ShiftButton.prototype = new components.Button({
     },
     connectContainer: function(container) {
         if (container instanceof components.ComponentContainer === false) {
-            TheNextBeatSX1.logError("Container type mismatch");
+            TNBSX1.logError("Container type mismatch");
         } else {
             this.connectedContainers.push(container);
-            TheNextBeatSX1.logDebug("Connected container " + this.connectedContainers.indexOf(container) + " to shift button 0x" + this.midi[1].toString(16));
+            TNBSX1.logDebug("Connected container " + this.connectedContainers.indexOf(container) + " to shift button 0x" + this.midi[1].toString(16));
         }
     }
 });
 
-TheNextBeatSX1.LoopInButton = function(options) {
+
+// SX1 SHIFT2 button.
+// It applies both for leftDeck and rightDeck controls. (activating blue color function when available)
+TNBSX1.Shift2Button = function(options) {
+	console.log("SX1: " + options);
+    this.state = false;
+    this.connectedContainers = [];
     components.Button.call(this, options);
 };
-TheNextBeatSX1.LoopInButton.prototype = new components.Button({
+TNBSX1.Shift2Button.prototype = new components.Button({
+    input: function(channel, control, value) {
+        //update shift state
+        this.state = TNBSX1.isButtonPressed(value);
+        this.send(this.outValueScale(this.state));
+
+        //call shift()/unshift() for each connected container
+        if (this.state) {
+			TNBSX1.leftDeck.loopSizeUpButton.inKey = "hotcue_1_clear";
+			TNBSX1.leftDeck.autoLoopButton.inKey = "hotcue_2_clear";
+			TNBSX1.leftDeck.loopSizeDownButton.inKey = "hotcue_3_clear";
+			TNBSX1.rightDeck.loopSizeUpButton.inKey = "hotcue_1_clear";
+			TNBSX1.rightDeck.autoLoopButton.inKey = "hotcue_2_clear";
+			TNBSX1.rightDeck.loopSizeDownButton.inKey = "hotcue_3_clear";
+				
+            this.connectedContainers.forEach(function(container) {
+                container.shift();
+            });
+        } else {
+            this.connectedContainers.forEach(function(container) {
+                container.unshift();
+            });
+        }
+    },
+    isActive: function() {
+        return this.state;
+    },
+    connectContainer: function(container) {
+        if (container instanceof components.ComponentContainer === false) {
+            TNBSX1.logError("Container type mismatch");
+        } else {
+            this.connectedContainers.push(container);
+            TNBSX1.logDebug("Connected container " + this.connectedContainers.indexOf(container) + " to shift button 0x" + this.midi[1].toString(16));
+        }
+    }
+});
+
+
+TNBSX1.LoopInButton = function(options) {
+    components.Button.call(this, options);
+};
+TNBSX1.LoopInButton.prototype = new components.Button({
     outKey: "loop_start_position",
     outValueScale: function(value) { return value >= 0 ? this.on : this.off; },
     unshift: function() {
@@ -208,16 +258,16 @@ TheNextBeatSX1.LoopInButton.prototype = new components.Button({
         this.inKey = "loop_start_position";
         this.input = function(channel, control, value, status) {
             if (this.isPress(channel, control, value, status)) {
-                this.inSetValue(TheNextBeatSX1.MIXXX_LOOP_POSITION_UNDEFINED);
+                this.inSetValue(TNBSX1.MIXXX_LOOP_POSITION_UNDEFINED);
             }
         };
     },
 });
 
-TheNextBeatSX1.LoopOutButton = function(options) {
+TNBSX1.LoopOutButton = function(options) {
     components.Button.call(this, options);
 };
-TheNextBeatSX1.LoopOutButton.prototype = new components.Button({
+TNBSX1.LoopOutButton.prototype = new components.Button({
     outKey: "loop_end_position",
     outValueScale: function(value) { return value >= 0 ? this.on : this.off; },
     unshift: function() {
@@ -229,30 +279,19 @@ TheNextBeatSX1.LoopOutButton.prototype = new components.Button({
         this.inKey = "loop_end_position";
         this.input = function(channel, control, value, status) {
             if (this.isPress(channel, control, value, status)) {
-                this.inSetValue(TheNextBeatSX1.MIXXX_LOOP_POSITION_UNDEFINED);
+                this.inSetValue(TNBSX1.MIXXX_LOOP_POSITION_UNDEFINED);
             }
         };
     },
 });
 
-TheNextBeatSX1.AutoLoopButton = function(options) {
-    components.Button.call(this, options);
-};
-TheNextBeatSX1.AutoLoopButton.prototype = new components.Button({
-    outKey: "beatloop_activate",
-    unshift: function() {
-        this.inKey = "beatloop_activate";
-    },
-    shift: function() {
-        this.inKey = "beatlooproll_activate";
-    },
-});
+
 
 // SX1 added custom button: TEMPO +
-TheNextBeatSX1.tempoUpButton = function(options) {
+TNBSX1.tempoUpButton = function(options) {
     components.Button.call(this, options);
 };
-TheNextBeatSX1.tempoUpButton.prototype = new components.Button({
+TNBSX1.tempoUpButton.prototype = new components.Button({
     outKey: "bpm_up_small",
     unshift: function() {
         this.inKey = "bpm_up_small";
@@ -263,10 +302,10 @@ TheNextBeatSX1.tempoUpButton.prototype = new components.Button({
 });
 
 // SX1 added custom button: TEMPO -
-TheNextBeatSX1.tempoDownButton = function(options) {
+TNBSX1.tempoDownButton = function(options) {
     components.Button.call(this, options);
 };
-TheNextBeatSX1.tempoDownButton.prototype = new components.Button({
+TNBSX1.tempoDownButton.prototype = new components.Button({
     outKey: "bpm_up_small",
     unshift: function() {
         this.inKey = "bpm_down_small";
@@ -276,11 +315,25 @@ TheNextBeatSX1.tempoDownButton.prototype = new components.Button({
     },
 });
 
-// SX1 added custom button: LOOP DOUBLE
-TheNextBeatSX1.loopSizeUpButton = function(options) {
+// SX1 added custom button: AutoLoop (UnShift) > HotCue2 set (shift) > HotCue2 unSet (shift2)
+TNBSX1.AutoLoopButton = function(options) {
     components.Button.call(this, options);
 };
-TheNextBeatSX1.loopSizeUpButton.prototype = new components.Button({
+TNBSX1.AutoLoopButton.prototype = new components.Button({
+    outKey: "beatloop_activate",
+    unshift: function() {
+        this.inKey = "beatloop_activate";
+    },
+    shift: function() {
+        this.inKey = "hotcue_2_activate";
+    },
+});
+
+// SX1 added custom button: Loop Double (unShift) >  HotCue1 set (shift) > HotCue1 unSet (shift2)
+TNBSX1.loopSizeUpButton = function(options) {
+    components.Button.call(this, options);
+};
+TNBSX1.loopSizeUpButton.prototype = new components.Button({
     outKey: "loop_double",
     unshift: function() {
         this.inKey = "loop_double";
@@ -293,14 +346,15 @@ TheNextBeatSX1.loopSizeUpButton.prototype = new components.Button({
     },
 });
 
-// SX1 added custom button: LOOP HALVE
-TheNextBeatSX1.loopSizeDownButton = function(options) {
+// SX1 added custom button: LOOP HALVE  HotCue1 set (shift). HotCue1 unSet (shift2)
+TNBSX1.loopSizeDownButton = function(options) {
     components.Button.call(this, options);
 };
-TheNextBeatSX1.loopSizeDownButton.prototype = new components.Button({
+TNBSX1.loopSizeDownButton.prototype = new components.Button({
     outKey: "loop_halve",
     unshift: function() {
         this.inKey = "loop_halve";
+		console.log(this.inKey);
     },
     shift: function() {
         this.inKey = "hotcue_3_activate";
@@ -310,10 +364,10 @@ TheNextBeatSX1.loopSizeDownButton.prototype = new components.Button({
     },	
 });
 
-TheNextBeatSX1.LoopActiveButton = function(options) {
+TNBSX1.LoopActiveButton = function(options) {
     components.Button.call(this, options);
 };
-TheNextBeatSX1.LoopActiveButton.prototype = new components.Button({
+TNBSX1.LoopActiveButton.prototype = new components.Button({
     outKey: "loop_enabled",
     unshift: function() {
         this.inKey = "reloop_toggle";
@@ -328,28 +382,28 @@ TheNextBeatSX1.LoopActiveButton.prototype = new components.Button({
 // Knobs                                                              //
 ////////////////////////////////////////////////////////////////////////
 
-TheNextBeatSX1.MIDI_KNOB_INC = 0x41;
-TheNextBeatSX1.MIDI_KNOB_DEC = 0x3F;
-TheNextBeatSX1.MIDI_KNOB_DELTA_BIAS = 0x40; // center value of relative movements
-//TheNextBeatSX1.MIDI_KNOB_STEPS = 20;  // 20 is full knob's rotation (360deg)
-TheNextBeatSX1.MIDI_KNOB_STEPS = 16;    // 16 is more like volume knobs
+TNBSX1.MIDI_KNOB_INC = 0x41;
+TNBSX1.MIDI_KNOB_DEC = 0x3F;
+TNBSX1.MIDI_KNOB_DELTA_BIAS = 0x40; // center value of relative movements
+//TNBSX1.MIDI_KNOB_STEPS = 20;  // 20 is full knob's rotation (360deg)
+TNBSX1.MIDI_KNOB_STEPS = 16;    // 16 is more like volume knobs
 
-TheNextBeatSX1.getKnobDelta = function(midiValue) {
-    return midiValue - TheNextBeatSX1.MIDI_KNOB_DELTA_BIAS;
+TNBSX1.getKnobDelta = function(midiValue) {
+    return midiValue - TNBSX1.MIDI_KNOB_DELTA_BIAS;
 };
 
-TheNextBeatSX1.knobInput = function(channel, control, value) {
-    var knobDelta = TheNextBeatSX1.getKnobDelta(value);
-    this.inSetParameter(this.inGetParameter() + knobDelta / TheNextBeatSX1.MIDI_KNOB_STEPS);
+TNBSX1.knobInput = function(channel, control, value) {
+    var knobDelta = TNBSX1.getKnobDelta(value);
+    this.inSetParameter(this.inGetParameter() + knobDelta / TNBSX1.MIDI_KNOB_STEPS);
 };
 
 /* Custom knobs */
-TheNextBeatSX1.LoopSizeKnob = function(options) {
+TNBSX1.LoopSizeKnob = function(options) {
     components.Pot.call(this, options);
 };
-TheNextBeatSX1.LoopSizeKnob.prototype = new components.Pot({
+TNBSX1.LoopSizeKnob.prototype = new components.Pot({
     input: function(channel, control, value) {
-        var knobDelta = TheNextBeatSX1.getKnobDelta(value);
+        var knobDelta = TNBSX1.getKnobDelta(value);
 
         if (knobDelta > 0) {
             engine.setValue(this.group, "loop_double", true);
@@ -364,7 +418,7 @@ TheNextBeatSX1.LoopSizeKnob.prototype = new components.Pot({
 // Decks                                                              //
 ////////////////////////////////////////////////////////////////////////
 
-TheNextBeatSX1.JOGMODES = {
+TNBSX1.JOGMODES = {
     normal: 0,
     vinyl: 1,
     search: 2,
@@ -372,18 +426,18 @@ TheNextBeatSX1.JOGMODES = {
     trax: 4,
 };
 
-TheNextBeatSX1.getJogDeltaValue = function(value) {
+TNBSX1.getJogDeltaValue = function(value) {
     if (value === 0x00) {
         return 0x00;
     } else {
-        return value - TheNextBeatSX1.MIDI_JOG_DELTA_BIAS;
+        return value - TNBSX1.MIDI_JOG_DELTA_BIAS;
     }
 };
 
 /* Constructor */
 
-TheNextBeatSX1.Deck = function(number) {
-    TheNextBeatSX1.logDebug("Creating Deck " + number);
+TNBSX1.Deck = function(number) {
+    TNBSX1.logDebug("Creating Deck " + number);
 
     this.number = number; 
     this.group = "[Channel" + number + "]";
@@ -395,51 +449,51 @@ TheNextBeatSX1.Deck = function(number) {
     components.Deck.call(this, number);
 
     //primary buttons
-    this.loadButton = new TheNextBeatSX1.LoadButton([0x90, TheNextBeatSX1.BUTTONMAP_CH0_CH1.load[number - 1]]);
-    this.playButton = new components.PlayButton([0x90, TheNextBeatSX1.BUTTONMAP_CH0_CH1.play[number - 1]]);
-    this.cueButton = new components.CueButton([0x90, TheNextBeatSX1.BUTTONMAP_CH0_CH1.cue[number - 1]]);
-    this.syncButton = new components.SyncButton([0x90, TheNextBeatSX1.BUTTONMAP_CH0_CH1.sync[number - 1]]);
-    this.bendMinusButton = new TheNextBeatSX1.BendMinusButton([0x90, TheNextBeatSX1.BUTTONMAP_CH0_CH1.bendminus[number - 1]]);
-    this.bendPlusButton = new TheNextBeatSX1.BendPlusButton([0x90, TheNextBeatSX1.BUTTONMAP_CH0_CH1.bendplus[number - 1]]);
-    this.jogModeSelector = new TheNextBeatSX1.JogModeSelector(number,
-        TheNextBeatSX1.BUTTONMAP_CH0_CH1.search[number - 1],
-        TheNextBeatSX1.BUTTONMAP_CH0_CH1.scratch[number - 1],
-        TheNextBeatSX1.BUTTONMAP_CH0_CH1.fxdrywet[number - 1]);
+    this.loadButton = new TNBSX1.LoadButton([0x90, TNBSX1.BUTTONMAP_CH0_CH1.load[number - 1]]);
+    this.playButton = new components.PlayButton([0x90, TNBSX1.BUTTONMAP_CH0_CH1.play[number - 1]]);
+    this.cueButton = new components.CueButton([0x90, TNBSX1.BUTTONMAP_CH0_CH1.cue[number - 1]]);
+    this.syncButton = new components.SyncButton([0x90, TNBSX1.BUTTONMAP_CH0_CH1.sync[number - 1]]);
+    this.bendMinusButton = new TNBSX1.BendMinusButton([0x90, TNBSX1.BUTTONMAP_CH0_CH1.bendminus[number - 1]]);
+    this.bendPlusButton = new TNBSX1.BendPlusButton([0x90, TNBSX1.BUTTONMAP_CH0_CH1.bendplus[number - 1]]);
+    this.jogModeSelector = new TNBSX1.JogModeSelector(number,
+        TNBSX1.BUTTONMAP_CH0_CH1.search[number - 1],
+        TNBSX1.BUTTONMAP_CH0_CH1.scratch[number - 1],
+        TNBSX1.BUTTONMAP_CH0_CH1.fxdrywet[number - 1]);
 
     //loops
-    this.loopsizeKnob = new TheNextBeatSX1.LoopSizeKnob([0xB0, TheNextBeatSX1.KNOBMAP_CH0_CH1.loopSize[number - 1]]);
-    this.loopInButton = new TheNextBeatSX1.LoopInButton([0x90, TheNextBeatSX1.BUTTONMAP_CH0_CH1.loopin[number - 1]]);
-    this.loopOutButton = new TheNextBeatSX1.LoopOutButton([0x90, TheNextBeatSX1.BUTTONMAP_CH0_CH1.loopout[number - 1]]);
-    this.autoLoopButton = new TheNextBeatSX1.AutoLoopButton([0x90, TheNextBeatSX1.BUTTONMAP_CH0_CH1.autoloop[number - 1]]);
-    this.loopActiveButton = new TheNextBeatSX1.LoopActiveButton([0x90, TheNextBeatSX1.BUTTONMAP_CH0_CH1.loopactive[number - 1]]);
+    this.loopsizeKnob = new TNBSX1.LoopSizeKnob([0xB0, TNBSX1.KNOBMAP_CH0_CH1.loopSize[number - 1]]);
+    this.loopInButton = new TNBSX1.LoopInButton([0x90, TNBSX1.BUTTONMAP_CH0_CH1.loopin[number - 1]]);
+    this.loopOutButton = new TNBSX1.LoopOutButton([0x90, TNBSX1.BUTTONMAP_CH0_CH1.loopout[number - 1]]);
+    this.autoLoopButton = new TNBSX1.AutoLoopButton([0x90, TNBSX1.BUTTONMAP_CH0_CH1.autoloop[number - 1]]);
+    this.loopActiveButton = new TNBSX1.LoopActiveButton([0x90, TNBSX1.BUTTONMAP_CH0_CH1.loopactive[number - 1]]);
 	
 	// SX1 added tempo + - buttons for bpm_down
-	this.tempoUpButton = new TheNextBeatSX1.tempoUpButton([0x90, TheNextBeatSX1.BUTTONMAP_CH0_CH1.tempoUp[number - 1]]);
-    this.tempoDownButton = new TheNextBeatSX1.tempoDownButton([0x90, TheNextBeatSX1.BUTTONMAP_CH0_CH1.tempoDown[number - 1]]);
+	this.tempoUpButton = new TNBSX1.tempoUpButton([0x90, TNBSX1.BUTTONMAP_CH0_CH1.tempoUp[number - 1]]);
+    this.tempoDownButton = new TNBSX1.tempoDownButton([0x90, TNBSX1.BUTTONMAP_CH0_CH1.tempoDown[number - 1]]);
 	
 	// SX1 added loopSize Up/Down + - buttons 
 	// UNSHIFT: Double/halve loop size
 	// SHIFT: HotCue 1, 3 set/go
 	// SHIFT: Unset HotCue 1, 3.
-	this.loopSizeUpButton = new TheNextBeatSX1.loopSizeUpButton([0x90, TheNextBeatSX1.BUTTONMAP_CH0_CH1.loopSizeUp[number - 1]]);
-    this.loopSizeDownButton = new TheNextBeatSX1.loopSizeDownButton([0x90, TheNextBeatSX1.BUTTONMAP_CH0_CH1.loopSizeDown[number - 1]]);	
+	this.loopSizeUpButton = new TNBSX1.loopSizeUpButton([0x90, TNBSX1.BUTTONMAP_CH0_CH1.loopSizeUp[number - 1]]);
+    this.loopSizeDownButton = new TNBSX1.loopSizeDownButton([0x90, TNBSX1.BUTTONMAP_CH0_CH1.loopSizeDown[number - 1]]);	
 	
 
     //effect assignment switches
     this.fx1AssignmentButton = new components.EffectAssignmentButton({
-        midi: [0x90, TheNextBeatSX1.BUTTONMAP_CH0_CH1.fx1assign[number - 1]],
+        midi: [0x90, TNBSX1.BUTTONMAP_CH0_CH1.fx1assign[number - 1]],
         effectUnit: 1,
         group: "[Channel" + number + "]",
     });
     this.fx2AssignmentButton = new components.EffectAssignmentButton({
-        midi: [0x90, TheNextBeatSX1.BUTTONMAP_CH0_CH1.fx2assign[number - 1]],
+        midi: [0x90, TNBSX1.BUTTONMAP_CH0_CH1.fx2assign[number - 1]],
         effectUnit: 2,
         group: "[Channel" + number + "]",
     });
 
     // high kill / quick effect enable button
-    this.highKillQuickEffectButton = new TheNextBeatSX1.HighKillQuickEffectButton({
-        midi: [0x90, TheNextBeatSX1.BUTTONMAP_CH0_CH1.highkill[number - 1]],
+    this.highKillQuickEffectButton = new TNBSX1.HighKillQuickEffectButton({
+        midi: [0x90, TNBSX1.BUTTONMAP_CH0_CH1.highkill[number - 1]],
         channelNr: number,
     });
 
@@ -457,24 +511,24 @@ TheNextBeatSX1.Deck = function(number) {
 };
 
 // give our custom Deck all the methods of the generic Deck in the Components library
-TheNextBeatSX1.Deck.prototype = Object.create(components.Deck.prototype);
+TNBSX1.Deck.prototype = Object.create(components.Deck.prototype);
 
 /* get/set Values */
 
-TheNextBeatSX1.Deck.prototype.getValue = function(key) {
+TNBSX1.Deck.prototype.getValue = function(key) {
     return engine.getValue(this.group, key);
 };
 
-TheNextBeatSX1.Deck.prototype.setValue = function(key, value) {
+TNBSX1.Deck.prototype.setValue = function(key, value) {
     engine.setValue(this.group, key, value);
 };
 
 /* Load Track */
 
-TheNextBeatSX1.LoadButton = function(options) {
+TNBSX1.LoadButton = function(options) {
     components.Button.call(this, options);
 };
-TheNextBeatSX1.LoadButton.prototype = new components.Button({
+TNBSX1.LoadButton.prototype = new components.Button({
     outKey: "track_loaded",
     unshift: function() {
         this.inKey = "LoadSelectedTrack";
@@ -486,17 +540,17 @@ TheNextBeatSX1.LoadButton.prototype = new components.Button({
 
 /* Cue & Play */
 
-TheNextBeatSX1.Deck.prototype.isPlaying = function() {
+TNBSX1.Deck.prototype.isPlaying = function() {
     return this.getValue("play");
 	console.log("isPlaying");
 };
 
 /* Pitch Bend / Track Search */
 
-TheNextBeatSX1.BendMinusButton = function(options) {
+TNBSX1.BendMinusButton = function(options) {
     components.Button.call(this, options);
 };
-TheNextBeatSX1.BendMinusButton.prototype = new components.Button({
+TNBSX1.BendMinusButton.prototype = new components.Button({
     key: "rate_temp_down",
     input: function(channel, control, value, status) {
         var isPlaying = engine.getValue(this.group, "play");
@@ -509,10 +563,10 @@ TheNextBeatSX1.BendMinusButton.prototype = new components.Button({
     },
 });
 
-TheNextBeatSX1.BendPlusButton = function(options) {
+TNBSX1.BendPlusButton = function(options) {
     components.Button.call(this, options);
 };
-TheNextBeatSX1.BendPlusButton.prototype = new components.Button({
+TNBSX1.BendPlusButton.prototype = new components.Button({
     key: "rate_temp_up",
     input: function(channel, control, value, status) {
         var isPlaying = engine.getValue(this.group, "play");
@@ -527,23 +581,23 @@ TheNextBeatSX1.BendPlusButton.prototype = new components.Button({
 
 /* Jog Mode */
 
-TheNextBeatSX1.JogModeSelector = function(number, searchMidiCtrl, scratchMidiCtrl, fxDryWetMidiCtrl) {
+TNBSX1.JogModeSelector = function(number, searchMidiCtrl, scratchMidiCtrl, fxDryWetMidiCtrl) {
     this.number = number;
     this.searchMidiCtrl = searchMidiCtrl;
     this.scratchMidiCtrl = scratchMidiCtrl;
     this.fxDryWetMidiCtrl = fxDryWetMidiCtrl;
-    this.jogMode = TheNextBeatSX1.JOGMODES.normal;
+    this.jogMode = TNBSX1.JOGMODES.normal;
     this.lastNonTraxJogMode = this.jogMode;
     this.input = this.inputNormal;
 
     components.Component.call(this);
     this.updateControls();
 };
-TheNextBeatSX1.JogModeSelector.prototype = new components.Component({
+TNBSX1.JogModeSelector.prototype = new components.Component({
     updateControls: function() {
-        var searchValue = this.jogMode === TheNextBeatSX1.JOGMODES.search ? TheNextBeatSX1.MIDI_ON : TheNextBeatSX1.MIDI_OFF;
-        var scratchValue = this.jogMode === TheNextBeatSX1.JOGMODES.vinyl ? TheNextBeatSX1.MIDI_ON : TheNextBeatSX1.MIDI_OFF;
-        var fxDryWetValue = this.jogMode === TheNextBeatSX1.JOGMODES.fxdrywet ? TheNextBeatSX1.MIDI_ON : TheNextBeatSX1.MIDI_OFF;
+        var searchValue = this.jogMode === TNBSX1.JOGMODES.search ? TNBSX1.MIDI_ON : TNBSX1.MIDI_OFF;
+        var scratchValue = this.jogMode === TNBSX1.JOGMODES.vinyl ? TNBSX1.MIDI_ON : TNBSX1.MIDI_OFF;
+        var fxDryWetValue = this.jogMode === TNBSX1.JOGMODES.fxdrywet ? TNBSX1.MIDI_ON : TNBSX1.MIDI_OFF;
 
         if (midi.sendShortMsg) {
             midi.sendShortMsg(0x90, this.searchMidiCtrl, searchValue);
@@ -552,41 +606,41 @@ TheNextBeatSX1.JogModeSelector.prototype = new components.Component({
         }
     },
     inputNormal: function(channel, control, value) {
-        var isButtonPressed = TheNextBeatSX1.isButtonPressed(value);
+        var isButtonPressed = TNBSX1.isButtonPressed(value);
         if (isButtonPressed) {
             switch (control) {
             case this.searchMidiCtrl:
-                this.jogMode = this.jogMode === TheNextBeatSX1.JOGMODES.search ? TheNextBeatSX1.JOGMODES.normal : TheNextBeatSX1.JOGMODES.search;
+                this.jogMode = this.jogMode === TNBSX1.JOGMODES.search ? TNBSX1.JOGMODES.normal : TNBSX1.JOGMODES.search;
                 break;
             case this.scratchMidiCtrl:
-                this.jogMode = this.jogMode === TheNextBeatSX1.JOGMODES.vinyl ? TheNextBeatSX1.JOGMODES.normal : TheNextBeatSX1.JOGMODES.vinyl;
+                this.jogMode = this.jogMode === TNBSX1.JOGMODES.vinyl ? TNBSX1.JOGMODES.normal : TNBSX1.JOGMODES.vinyl;
                 break;
             case this.fxDryWetMidiCtrl:
-                this.jogMode = this.jogMode === TheNextBeatSX1.JOGMODES.fxdrywet ? TheNextBeatSX1.JOGMODES.normal : TheNextBeatSX1.JOGMODES.fxdrywet;
+                this.jogMode = this.jogMode === TNBSX1.JOGMODES.fxdrywet ? TNBSX1.JOGMODES.normal : TNBSX1.JOGMODES.fxdrywet;
                 break;
             default:
-                TheNextBeatSX1.logError("Unexpected MIDI ctrl value: " + control);
+                TNBSX1.logError("Unexpected MIDI ctrl value: " + control);
             }
-            if (this.jogMode !== TheNextBeatSX1.JOGMODES.vinyl && engine.isScratching(this.number)) {
-                engine.scratchDisable(this.number, TheNextBeatSX1.JOG_SCRATCH_RAMP);
+            if (this.jogMode !== TNBSX1.JOGMODES.vinyl && engine.isScratching(this.number)) {
+                engine.scratchDisable(this.number, TNBSX1.JOG_SCRATCH_RAMP);
             }
             this.updateControls();
         }
     },
     inputTrax: function(channel, control, value) {
-        var isButtonPressed = TheNextBeatSX1.isButtonPressed(value);
+        var isButtonPressed = TNBSX1.isButtonPressed(value);
         if (isButtonPressed) {
             switch (control) {
             case this.searchMidiCtrl:
-            case this.searchMidiCtrl + TheNextBeatSX1.SHIFT_OFFSET:
+            case this.searchMidiCtrl + TNBSX1.SHIFT_OFFSET:
                 engine.setValue("[Library]", "MoveRight", 1);
                 break;
             case this.scratchMidiCtrl:
-            case this.scratchMidiCtrl + TheNextBeatSX1.SHIFT_OFFSET:
+            case this.scratchMidiCtrl + TNBSX1.SHIFT_OFFSET:
                 engine.setValue("[Library]", "MoveLeft", 1);
                 break;
             case this.fxDryWetMidiCtrl:
-            case this.fxDryWetMidiCtrl + TheNextBeatSX1.SHIFT_OFFSET:
+            case this.fxDryWetMidiCtrl + TNBSX1.SHIFT_OFFSET:
                 //'MoveFocusForward' is equivalent to pressing TAB key on the keyboard
                 engine.setValue("[Library]", "MoveFocusForward", 1);
                 break;
@@ -595,30 +649,30 @@ TheNextBeatSX1.JogModeSelector.prototype = new components.Component({
                    moving focus backward/forward. It seems that using only
                    'MoveFocusForward' is enough.
 
-                case TheNextBeatSX1.BUTTONMAP_CH0_CH1.fxdrywet[0]:
-                case TheNextBeatSX1.BUTTONMAP_CH0_CH1.fxdrywet[0] + TheNextBeatSX1.SHIFT_OFFSET:
+                case TNBSX1.BUTTONMAP_CH0_CH1.fxdrywet[0]:
+                case TNBSX1.BUTTONMAP_CH0_CH1.fxdrywet[0] + TNBSX1.SHIFT_OFFSET:
                     engine.setValue('[Library]', 'MoveFocusBackward', 1);
                     break;
-                case TheNextBeatSX1.BUTTONMAP_CH0_CH1.fxdrywet[1]:
-                case TheNextBeatSX1.BUTTONMAP_CH0_CH1.fxdrywet[1] + TheNextBeatSX1.SHIFT_OFFSET:
+                case TNBSX1.BUTTONMAP_CH0_CH1.fxdrywet[1]:
+                case TNBSX1.BUTTONMAP_CH0_CH1.fxdrywet[1] + TNBSX1.SHIFT_OFFSET:
                     engine.setValue('[Library]', 'MoveFocusForward', 1);
                     break;*/
             default:
-                TheNextBeatSX1.logError("Unexpected MIDI ctrl value: " + control);
+                TNBSX1.logError("Unexpected MIDI ctrl value: " + control);
             }
         }
     },
     setTraxMode: function(isTraxModeEnabled) {
         if (isTraxModeEnabled) {
-            if (this.jogMode !== TheNextBeatSX1.JOGMODES.trax) {
+            if (this.jogMode !== TNBSX1.JOGMODES.trax) {
                 this.lastNonTraxJogMode = this.jogMode;
-                this.jogMode = TheNextBeatSX1.JOGMODES.trax;
+                this.jogMode = TNBSX1.JOGMODES.trax;
                 this.input = this.inputTrax;
                 //set all LEDs on to indicate trax mode
                 if (midi.sendShortMsg) {
-                    midi.sendShortMsg(0x90, this.searchMidiCtrl, TheNextBeatSX1.MIDI_ON);
-                    midi.sendShortMsg(0x90, this.scratchMidiCtrl, TheNextBeatSX1.MIDI_ON);
-                    midi.sendShortMsg(0x90, this.fxDryWetMidiCtrl, TheNextBeatSX1.MIDI_ON);
+                    midi.sendShortMsg(0x90, this.searchMidiCtrl, TNBSX1.MIDI_ON);
+                    midi.sendShortMsg(0x90, this.scratchMidiCtrl, TNBSX1.MIDI_ON);
+                    midi.sendShortMsg(0x90, this.fxDryWetMidiCtrl, TNBSX1.MIDI_ON);
                 }
             }
         } else {
@@ -643,53 +697,53 @@ TheNextBeatSX1.JogModeSelector.prototype = new components.Component({
 
 /* Jog Wheel */
 
-TheNextBeatSX1.Deck.prototype.onJogTouch = function(channel, control, value) {
+TNBSX1.Deck.prototype.onJogTouch = function(channel, control, value) {
     var currentJogMode =  this.jogModeSelector.jogMode;
-    this.jogTouchState = TheNextBeatSX1.isButtonPressed(value);
+    this.jogTouchState = TNBSX1.isButtonPressed(value);
 
-    if (currentJogMode === TheNextBeatSX1.JOGMODES.vinyl && this.jogTouchState) {
+    if (currentJogMode === TNBSX1.JOGMODES.vinyl && this.jogTouchState) {
         engine.scratchEnable(this.number,
-            TheNextBeatSX1.JOG_RESOLUTION,
-            TheNextBeatSX1.JOG_SCRATCH_RPM,
-            TheNextBeatSX1.JOG_SCRATCH_ALPHA,
-            TheNextBeatSX1.JOG_SCRATCH_BETA,
-            TheNextBeatSX1.JOG_SCRATCH_RAMP);
+            TNBSX1.JOG_RESOLUTION,
+            TNBSX1.JOG_SCRATCH_RPM,
+            TNBSX1.JOG_SCRATCH_ALPHA,
+            TNBSX1.JOG_SCRATCH_BETA,
+            TNBSX1.JOG_SCRATCH_RAMP);
     } else if (!this.jogTouchState && engine.isScratching(this.number)) {
-        engine.scratchDisable(this.number, TheNextBeatSX1.JOG_SCRATCH_RAMP);
+        engine.scratchDisable(this.number, TNBSX1.JOG_SCRATCH_RAMP);
     }
 };
 
-TheNextBeatSX1.Deck.prototype.onJogSpin = function(channel, control, value) {
+TNBSX1.Deck.prototype.onJogSpin = function(channel, control, value) {
     var currentJogMode =  this.jogModeSelector.jogMode;
-	TheNextBeatSX1.logInfo("SX1 value for currentJogMode: " + currentJogMode);
-    var jogDelta = TheNextBeatSX1.getJogDeltaValue(value);
-	TheNextBeatSX1.logInfo("SX1 value for jogDelta: " + jogDelta);
+	TNBSX1.logInfo("SX1 value for currentJogMode: " + currentJogMode);
+    var jogDelta = TNBSX1.getJogDeltaValue(value);
+	TNBSX1.logInfo("SX1 value for jogDelta: " + jogDelta);
 
-    if (currentJogMode === TheNextBeatSX1.JOGMODES.vinyl) {
+    if (currentJogMode === TNBSX1.JOGMODES.vinyl) {
         engine.scratchTick(this.number, jogDelta);
-    } else if (currentJogMode === TheNextBeatSX1.JOGMODES.fxdrywet) {
+    } else if (currentJogMode === TNBSX1.JOGMODES.fxdrywet) {
         var currMixValue = engine.getParameter("[EffectRack1_EffectUnit" + this.number + "]", "mix");
-        engine.setParameter("[EffectRack1_EffectUnit" + this.number + "]", "mix", currMixValue + jogDelta / TheNextBeatSX1.JOG_RESOLUTION);
-    } else if (currentJogMode === TheNextBeatSX1.JOGMODES.search) {
+        engine.setParameter("[EffectRack1_EffectUnit" + this.number + "]", "mix", currMixValue + jogDelta / TNBSX1.JOG_RESOLUTION);
+    } else if (currentJogMode === TNBSX1.JOGMODES.search) {
         var playPos = engine.getValue(this.group, "playposition");
         if (undefined !== playPos) {
-            var seekPos = playPos + (jogDelta / (TheNextBeatSX1.JOG_RESOLUTION * TheNextBeatSX1.JOG_SEEK_REVOLUTIONS));
+            var seekPos = playPos + (jogDelta / (TNBSX1.JOG_RESOLUTION * TNBSX1.JOG_SEEK_REVOLUTIONS));
             this.setValue("playposition", Math.max(0.0, Math.min(1.0, seekPos)));
         }
-    } else if (currentJogMode === TheNextBeatSX1.JOGMODES.trax) {
+    } else if (currentJogMode === TNBSX1.JOGMODES.trax) {
         engine.setValue("[Library]", "MoveVertical", jogDelta);
-    } else if (currentJogMode === TheNextBeatSX1.JOGMODES.normal) {
-        var normalizedDelta = jogDelta / TheNextBeatSX1.MIDI_JOG_DELTA_RANGE;
+    } else if (currentJogMode === TNBSX1.JOGMODES.normal) {
+        var normalizedDelta = jogDelta / TNBSX1.MIDI_JOG_DELTA_RANGE;
         var scaledDelta;
         var jogExponent;
         if (this.isPlaying()) {
             // bending
-            scaledDelta = normalizedDelta / TheNextBeatSX1.JOG_SPIN_PLAY_PEAK;
-            jogExponent = TheNextBeatSX1.JOG_SPIN_PLAY_EXPONENT;
+            scaledDelta = normalizedDelta / TNBSX1.JOG_SPIN_PLAY_PEAK;
+            jogExponent = TNBSX1.JOG_SPIN_PLAY_EXPONENT;
         } else {
             // cueing
-            scaledDelta = normalizedDelta / TheNextBeatSX1.JOG_SPIN_CUE_PEAK;
-            jogExponent = TheNextBeatSX1.JOG_SPIN_CUE_EXPONENT;
+            scaledDelta = normalizedDelta / TNBSX1.JOG_SPIN_CUE_PEAK;
+            jogExponent = TNBSX1.JOG_SPIN_CUE_EXPONENT;
         }
         var direction;
         var scaledDeltaAbs;
@@ -701,12 +755,12 @@ TheNextBeatSX1.Deck.prototype.onJogSpin = function(channel, control, value) {
             scaledDeltaAbs = scaledDelta;
         }
         var scaledDeltaPow = direction * Math.pow(scaledDeltaAbs, jogExponent);
-        var jogValue = TheNextBeatSX1.MIXXX_JOG_RANGE * scaledDeltaPow;
+        var jogValue = TNBSX1.MIXXX_JOG_RANGE * scaledDeltaPow;
         this.setValue("jog", jogValue);
-		TheNextBeatSX1.logInfo("SX1 value for scaledDelta: " + scaledDelta);
-		TheNextBeatSX1.logInfo("SX1 value for direction: " + direction);
+		TNBSX1.logInfo("SX1 value for scaledDelta: " + scaledDelta);
+		TNBSX1.logInfo("SX1 value for direction: " + direction);
     } else {
-        TheNextBeatSX1.logError("onJogSpin unknown mode error!");
+        TNBSX1.logError("onJogSpin unknown mode error!");
     }
 };
 
@@ -716,15 +770,15 @@ TheNextBeatSX1.Deck.prototype.onJogSpin = function(channel, control, value) {
 ////////////////////////////////////////////////////////////////////////
 
 //functions for overriding default unshift/shift functions of efx unit knobs
-TheNextBeatSX1.efxUnitKnobUnshift = function() {
+TNBSX1.efxUnitKnobUnshift = function() {
     this.input = function(channel, control, value) {
-        var knobDelta = TheNextBeatSX1.getKnobDelta(value);
-        this.inSetParameter(this.inGetParameter() + knobDelta / TheNextBeatSX1.MIDI_KNOB_STEPS);
+        var knobDelta = TNBSX1.getKnobDelta(value);
+        this.inSetParameter(this.inGetParameter() + knobDelta / TNBSX1.MIDI_KNOB_STEPS);
     };
 };
-TheNextBeatSX1.efxUnitKnobShift = function() {
+TNBSX1.efxUnitKnobShift = function() {
     this.input = function(channel, control, value) {
-        var knobDelta = TheNextBeatSX1.getKnobDelta(value);
+        var knobDelta = TNBSX1.getKnobDelta(value);
         var effectGroup = "[EffectRack1_EffectUnit" +
                             this.eu.currentUnitNumber + "_Effect" +
                             this.number + "]";
@@ -741,11 +795,11 @@ TheNextBeatSX1.efxUnitKnobShift = function() {
 
 /* HIGH kill / QuickEffect enable button */
 
-TheNextBeatSX1.HighKillQuickEffectButton = function(options) {
+TNBSX1.HighKillQuickEffectButton = function(options) {
     this.channelNr = options.channelNr;
     components.Button.call(this, options);
 };
-TheNextBeatSX1.HighKillQuickEffectButton.prototype = new components.Button({
+TNBSX1.HighKillQuickEffectButton.prototype = new components.Button({
     type: components.Button.prototype.types.powerWindow,
     unshift: function() {
         this.disconnect();
@@ -772,10 +826,10 @@ TheNextBeatSX1.HighKillQuickEffectButton.prototype = new components.Button({
 
 /* Trax knob */
 
-TheNextBeatSX1.TraxKnob = function(options) {
+TNBSX1.TraxKnob = function(options) {
     components.Encoder.call(this, options);
 };
-TheNextBeatSX1.TraxKnob.prototype = new components.Encoder({
+TNBSX1.TraxKnob.prototype = new components.Encoder({
     group: "[Library]",
     unshift: function() {
         this.inKey = "MoveVertical";
@@ -784,14 +838,14 @@ TheNextBeatSX1.TraxKnob.prototype = new components.Encoder({
         this.inKey = "ScrollVertical";
     },
     input: function(channel, control, value) {
-        var knobDelta = TheNextBeatSX1.getKnobDelta(value);
+        var knobDelta = TNBSX1.getKnobDelta(value);
         this.inSetValue(knobDelta);
     }
 });
 
 /* Trax button */
 
-TheNextBeatSX1.TraxButton = function(obj) {
+TNBSX1.TraxButton = function(obj) {
     this.detectedDecks = [];
     /* group and/or outKey cannot be defined at prototype initialization
        (inside anonymous object passed to components.Button constructor
@@ -811,7 +865,7 @@ TheNextBeatSX1.TraxButton = function(obj) {
     this.detectDecks(obj);
     components.Button.call(this);
 };
-TheNextBeatSX1.TraxButton.prototype = new components.Button({
+TNBSX1.TraxButton.prototype = new components.Button({
     unshift: function() {
         this.type = components.Button.prototype.types.toggle;
         this.group = "[Master]";
@@ -834,7 +888,7 @@ TheNextBeatSX1.TraxButton.prototype = new components.Button({
         // find decks in the passed object and store them in the array
         for (var memberName in obj) {
             if (Object.prototype.hasOwnProperty.call(obj, memberName) && obj[memberName] instanceof components.Deck) {
-                TheNextBeatSX1.logDebug("Detected " + memberName);
+                TNBSX1.logDebug("Detected " + memberName);
                 this.detectedDecks.push(obj[memberName]);
             }
         }
@@ -843,89 +897,91 @@ TheNextBeatSX1.TraxButton.prototype = new components.Button({
 
 /* Trax container */
 
-TheNextBeatSX1.Trax = function(obj) {
-    this.traxKnob = new TheNextBeatSX1.TraxKnob();
-    this.traxButton = new TheNextBeatSX1.TraxButton(obj);
+TNBSX1.Trax = function(obj) {
+    this.traxKnob = new TNBSX1.TraxKnob();
+    this.traxButton = new TNBSX1.TraxButton(obj);
 };
-TheNextBeatSX1.Trax.prototype = new components.ComponentContainer();
+TNBSX1.Trax.prototype = new components.ComponentContainer();
 
 
 ////////////////////////////////////////////////////////////////////////
 // Mixxx Callback Functions                                           //
 ////////////////////////////////////////////////////////////////////////
 
-TheNextBeatSX1.init = function(id, debug) {
-    TheNextBeatSX1.id = id;
-    TheNextBeatSX1.debug = debug;
+TNBSX1.init = function(id, debug) {
+    TNBSX1.id = id;
+    TNBSX1.debug = debug;
 
-    TheNextBeatSX1.logInfo("Initializing controller");
+    TNBSX1.logInfo("Initializing controller");
 
     // left and right shift button
-    TheNextBeatSX1.leftShiftButton = new TheNextBeatSX1.ShiftButton([0x90, 0x0A]);
-    TheNextBeatSX1.rightShiftButton = new TheNextBeatSX1.ShiftButton([0x90, 0x46]);
+    TNBSX1.leftShiftButton = new TNBSX1.ShiftButton([0x90, 0x33]);
+    TNBSX1.rightShiftButton = new TNBSX1.Shift2Button([0x90, 0x3c]);
 
     // left and right deck
-    TheNextBeatSX1.leftDeck = new TheNextBeatSX1.Deck(1);
-    TheNextBeatSX1.rightDeck = new TheNextBeatSX1.Deck(2);
+    TNBSX1.leftDeck = new TNBSX1.Deck(1);
+    TNBSX1.rightDeck = new TNBSX1.Deck(2);
 
     // effect unit 1
-    TheNextBeatSX1.fx1 = new components.EffectUnit(1);
-    TheNextBeatSX1.fx1.EffectUnitKnob.prototype.unshift = TheNextBeatSX1.efxUnitKnobUnshift;
-    TheNextBeatSX1.fx1.EffectUnitKnob.prototype.shift = TheNextBeatSX1.efxUnitKnobShift;
-    TheNextBeatSX1.fx1.EffectUnitKnob.prototype.eu = TheNextBeatSX1.fx1;    // hack for use by reimplemented unshift/shift
-    TheNextBeatSX1.fx1.enableButtons[1].midi = [0x90, 0x07];
-    TheNextBeatSX1.fx1.enableButtons[2].midi = [0x90, 0x0C];
-    TheNextBeatSX1.fx1.enableButtons[3].midi = [0x90, 0x09];
-    TheNextBeatSX1.fx1.knobs[1].midi = [0xB0, 0x07];
-    TheNextBeatSX1.fx1.knobs[2].midi = [0xB0, 0x08];
-    TheNextBeatSX1.fx1.knobs[3].midi = [0xB0, 0x09];
-    TheNextBeatSX1.fx1.dryWetKnob.midi = [0xB0, 0x0A];
-    TheNextBeatSX1.fx1.dryWetKnob.input = TheNextBeatSX1.knobInput;
-    TheNextBeatSX1.fx1.effectFocusButton.midi = [0x90, 0x0E];
+    TNBSX1.fx1 = new components.EffectUnit(1);
+    TNBSX1.fx1.EffectUnitKnob.prototype.unshift = TNBSX1.efxUnitKnobUnshift;
+    TNBSX1.fx1.EffectUnitKnob.prototype.shift = TNBSX1.efxUnitKnobShift;
+    TNBSX1.fx1.EffectUnitKnob.prototype.eu = TNBSX1.fx1;    // hack for use by reimplemented unshift/shift
+    TNBSX1.fx1.enableButtons[1].midi = [0x90, 0x07];
+    TNBSX1.fx1.enableButtons[2].midi = [0x90, 0x00]; // removed for conflict: [0x90, 0x0C];
+    TNBSX1.fx1.enableButtons[3].midi = [0x90, 0x09];
+    TNBSX1.fx1.knobs[1].midi = [0xB0, 0x07];
+    TNBSX1.fx1.knobs[2].midi = [0xB0, 0x08];
+    TNBSX1.fx1.knobs[3].midi = [0xB0, 0x09];
+    TNBSX1.fx1.dryWetKnob.midi = [0xB0, 0x0A];
+    TNBSX1.fx1.dryWetKnob.input = TNBSX1.knobInput;
+    TNBSX1.fx1.effectFocusButton.midi = [0x90, 0x00]; // removed (conflict) [0x90, 0x0E]
     // We need to call unshift() again for each EffectUnitKnob as we
     // swapped its implementation after fx object construction (when
     // it is called automatically)
     for (var n = 1; n <= 3; n++) {
-        TheNextBeatSX1.fx1.knobs[n].unshift();
+        TNBSX1.fx1.knobs[n].unshift();
     }
     // Now init the fx unit
-    TheNextBeatSX1.fx1.init();
+    TNBSX1.fx1.init();
 
     // effect unit 2
-    TheNextBeatSX1.fx2 = new components.EffectUnit(2);
-    TheNextBeatSX1.fx2.EffectUnitKnob.prototype.unshift = TheNextBeatSX1.efxUnitKnobUnshift;
-    TheNextBeatSX1.fx2.EffectUnitKnob.prototype.shift = TheNextBeatSX1.efxUnitKnobShift;
-    TheNextBeatSX1.fx2.EffectUnitKnob.prototype.eu = TheNextBeatSX1.fx2;    // hack for use by reimplemented unshift/shift
-    TheNextBeatSX1.fx2.enableButtons[1].midi = [0x90, 0x48];
-    TheNextBeatSX1.fx2.enableButtons[2].midi = [0x90, 0x43];
-    TheNextBeatSX1.fx2.enableButtons[3].midi = [0x90, 0x9A];
-    TheNextBeatSX1.fx2.knobs[1].midi = [0xB0, 0x44];
-    TheNextBeatSX1.fx2.knobs[2].midi = [0xB0, 0x43];
-    TheNextBeatSX1.fx2.knobs[3].midi = [0xB0, 0x46];
-    TheNextBeatSX1.fx2.dryWetKnob.midi = [0xB0, 0x45];
-    TheNextBeatSX1.fx2.dryWetKnob.input = TheNextBeatSX1.knobInput;
-    TheNextBeatSX1.fx2.effectFocusButton.midi = [0x90, 0x45];
+    TNBSX1.fx2 = new components.EffectUnit(2);
+    TNBSX1.fx2.EffectUnitKnob.prototype.unshift = TNBSX1.efxUnitKnobUnshift;
+    TNBSX1.fx2.EffectUnitKnob.prototype.shift = TNBSX1.efxUnitKnobShift;
+    TNBSX1.fx2.EffectUnitKnob.prototype.eu = TNBSX1.fx2;    // hack for use by reimplemented unshift/shift
+    TNBSX1.fx2.enableButtons[1].midi = [0x90, 0x48];
+    TNBSX1.fx2.enableButtons[2].midi = [0x90, 0x43];
+    TNBSX1.fx2.enableButtons[3].midi = [0x90, 0x9A];
+    TNBSX1.fx2.knobs[1].midi = [0xB0, 0x44];
+    TNBSX1.fx2.knobs[2].midi = [0xB0, 0x43];
+    TNBSX1.fx2.knobs[3].midi = [0xB0, 0x00]; // removed (conflict) [0xB0, 0x46];
+    TNBSX1.fx2.dryWetKnob.midi = [0xB0, 0x45];
+    TNBSX1.fx2.dryWetKnob.input = TNBSX1.knobInput;
+    TNBSX1.fx2.effectFocusButton.midi = [0x90, 0x45];
     // We need to call unshift() again for each EffectUnitKnob as we
     // swapped its implementation after fx object construction (when
     // it is called automatically)
     for (n = 1; n <= 3; n++) {
-        TheNextBeatSX1.fx2.knobs[n].unshift();
+        TNBSX1.fx2.knobs[n].unshift();
     }
     // Now init the fx unit
-    TheNextBeatSX1.fx2.init();
+    TNBSX1.fx2.init();
 
     // Trax/library
-    TheNextBeatSX1.trax = new TheNextBeatSX1.Trax(TheNextBeatSX1);
+    TNBSX1.trax = new TNBSX1.Trax(TNBSX1);
 
     // connect decks, efx units and trax to shift buttons
-    TheNextBeatSX1.leftShiftButton.connectContainer(TheNextBeatSX1.leftDeck);
-    TheNextBeatSX1.leftShiftButton.connectContainer(TheNextBeatSX1.fx1);
-    TheNextBeatSX1.leftShiftButton.connectContainer(TheNextBeatSX1.trax);
-    TheNextBeatSX1.rightShiftButton.connectContainer(TheNextBeatSX1.rightDeck);
-    TheNextBeatSX1.rightShiftButton.connectContainer(TheNextBeatSX1.fx2);
-    TheNextBeatSX1.rightShiftButton.connectContainer(TheNextBeatSX1.trax);
+    TNBSX1.leftShiftButton.connectContainer(TNBSX1.leftDeck);
+	TNBSX1.leftShiftButton.connectContainer(TNBSX1.rightDeck);
+    TNBSX1.leftShiftButton.connectContainer(TNBSX1.fx1);
+    TNBSX1.leftShiftButton.connectContainer(TNBSX1.trax);
+//    TNBSX1.rightShiftButton.connectContainer(TNBSX1.rightDeck);
+
+    TNBSX1.rightShiftButton.connectContainer(TNBSX1.fx2);
+    TNBSX1.rightShiftButton.connectContainer(TNBSX1.trax);
 };
 
-TheNextBeatSX1.shutdown = function() {
-    TheNextBeatSX1.logInfo("Shutting down controller");
+TNBSX1.shutdown = function() {
+    TNBSX1.logInfo("Shutting down controller");
 };
