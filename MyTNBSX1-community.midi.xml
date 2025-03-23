@@ -11,7 +11,7 @@
             <file filename="midi-components-0.0.js" functionprefix=""/>
             <file filename="MyTNBSX1-community-scripts.js" functionprefix="TNBSX1"/>
         </scriptfiles>
-       <controls>
+        <controls>
             <control>
                 <group>[EqualizerRack1_[Channel2]_Effect1]</group>
                 <key>TNBSX1.rightDeck.highKillQuickEffectButton.input</key>
@@ -373,16 +373,6 @@
                 </options>
             </control>
             <control>
-                <group>[Library]</group>
-                <key>TNBSX1.trax.traxKnob.input</key>
-                <description>SX1: N/A DJ2: x13</description>
-                <status>0xB0</status>
-                <midino>0x00</midino>
-                <options>
-                    <script-binding/>
-                </options>
-            </control>
-            <control>
                 <group>[EqualizerRack1_[Channel2]_Effect1]</group>
                 <key>parameter2</key>
                 <description>SX1: N/A x40 in RDJ2</description>
@@ -570,16 +560,6 @@
                 <group>[Master]</group>
                 <key>headMix</key>
                 <description>MIDI Learned from 2 messages.</description>
-                <status>0x80</status>
-                <midino>0x0D</midino>
-                <options>
-                    <switch/>
-                </options>
-            </control>
-            <control>
-                <group>[Master]</group>
-                <key>headMix</key>
-                <description>MIDI Learned from 2 messages.</description>
                 <status>0x90</status>
                 <midino>0x0D</midino>
                 <options>
@@ -666,6 +646,16 @@
                 <key>TNBSX1.leftDeck.onJogSpin</key>
                 <status>0xB0</status>
                 <midino>0x19</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Library]</group>
+                <key>TNBSX1.trax.traxKnob.input</key>
+                <description>SX1: N/A DJ2: x13</description>
+                <status>0xB0</status>
+                <midino>0x1A</midino>
                 <options>
                     <script-binding/>
                 </options>
@@ -786,25 +776,7 @@
             <control>
                 <group>[Channel1]</group>
                 <key>TNBSX1.leftShiftButton.input</key>
-                <status>0x90</status>
-                <midino>0x33</midino>
-                <options>
-                    <script-binding/>
-                </options>
-            </control>
-            <control>
-                <group>[Channel1]</group>
-                <key>TNBSX1.leftShiftButton.input</key>
                 <status>0x80</status>
-                <midino>0x33</midino>
-                <options>
-                    <script-binding/>
-                </options>
-            </control>
-            <control>
-                <group>[Channel2]</group>
-                <key>TNBSX1.leftShiftButton.input</key>
-                <status>0x90</status>
                 <midino>0x33</midino>
                 <options>
                     <script-binding/>
@@ -821,9 +793,9 @@
             </control>
             <control>
                 <group>[Channel1]</group>
-                <key>TNBSX1.rightShiftButton.input</key>
+                <key>TNBSX1.leftShiftButton.input</key>
                 <status>0x90</status>
-                <midino>0x3c</midino>
+                <midino>0x33</midino>
                 <options>
                     <script-binding/>
                 </options>
@@ -831,26 +803,8 @@
             <control>
                 <group>[Channel2]</group>
                 <key>TNBSX1.leftShiftButton.input</key>
-                <status>0x80</status>
-                <midino>0x3c</midino>
-                <options>
-                    <script-binding/>
-                </options>
-            </control>
-            <control>
-                <group>[Channel1]</group>
-                <key>TNBSX1.rightShiftButton.input</key>
                 <status>0x90</status>
-                <midino>0x3c</midino>
-                <options>
-                    <script-binding/>
-                </options>
-            </control>
-            <control>
-                <group>[Channel2]</group>
-                <key>TNBSX1.leftShiftButton.input</key>
-                <status>0x80</status>
-                <midino>0x3c</midino>
+                <midino>0x33</midino>
                 <options>
                     <script-binding/>
                 </options>
@@ -865,6 +819,16 @@
                     <script-binding/>
                 </options>
             </control>
+            <control>
+                <group>[Channel2]</group>
+                <key>pfl</key>
+                <description>SX1: Load track button activates PFL too! </description>
+                <status>0x90</status>
+                <midino>0x34</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>	
             <control>
                 <group>[Channel2]</group>
                 <key>TNBSX1.rightDeck.jogModeSelector.input</key>
@@ -932,6 +896,42 @@
                 <midino>0x3B</midino>
                 <options>
                     <normal/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel2]</group>
+                <key>TNBSX1.leftShiftButton.input</key>
+                <status>0x80</status>
+                <midino>0x3C</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel2]</group>
+                <key>TNBSX1.leftShiftButton.input</key>
+                <status>0x80</status>
+                <midino>0x3C</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel1]</group>
+                <key>TNBSX1.rightShiftButton.input</key>
+                <status>0x90</status>
+                <midino>0x3C</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel1]</group>
+                <key>TNBSX1.rightShiftButton.input</key>
+                <status>0x90</status>
+                <midino>0x3C</midino>
+                <options>
+                    <script-binding/>
                 </options>
             </control>
             <control>
@@ -1089,6 +1089,16 @@
                 <midino>0x4B</midino>
                 <options>
                     <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel1]</group>
+                <key>pfl</key>
+                <description>SX1: Load track button activates PFL too! </description>
+                <status>0x90</status>
+                <midino>0x4B</midino>
+                <options>
+                    <normal/>
                 </options>
             </control>
             <control>
@@ -1358,6 +1368,14 @@
                 <midino>0x9A</midino>
                 <options>
                     <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group></group>
+                <key></key>
+                <status>0x00</status>
+                <options>
+                    <normal/>
                 </options>
             </control>
             <control>

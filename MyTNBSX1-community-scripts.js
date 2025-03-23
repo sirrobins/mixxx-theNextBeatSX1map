@@ -14,12 +14,12 @@ var TNBSX1 = {};
 ////////////////////////////////////////////////////////////////////////
 
 //TNBSX1.JOG_SPIN_CUE_PEAK = 0.2; // [0.0, 1.0]
-TNBSX1.JOG_SPIN_CUE_PEAK = 0.8; // [0.0, 1.0]
+TNBSX1.JOG_SPIN_CUE_PEAK = 0.1; // [0.0, 1.0]
 //TNBSX1.JOG_SPIN_CUE_EXPONENT = 0.3; // 1.0 = linear response
-TNBSX1.JOG_SPIN_CUE_EXPONENT = 0.9; // 1.0 = linear response
+TNBSX1.JOG_SPIN_CUE_EXPONENT = 0.1; // 1.0 = linear response
 
-TNBSX1.JOG_SPIN_PLAY_PEAK = 0.1; // [0.0, 1.0]
-TNBSX1.JOG_SPIN_PLAY_EXPONENT = 0.7; // 1.0 = linear response
+TNBSX1.JOG_SPIN_PLAY_PEAK = 0.9; // [0.0, 1.0]
+TNBSX1.JOG_SPIN_PLAY_EXPONENT = 0.1; // 1.0 = linear response
 
 TNBSX1.JOG_SCRATCH_RPM = 33.333333; // 33 1/3
 TNBSX1.JOG_SCRATCH_ALPHA = 0.125; // 1/8
@@ -28,7 +28,8 @@ TNBSX1.JOG_SCRATCH_RAMP = true; // required for back spins
 
 // Seeking: Number of revolutions needed to seek from the beginning
 // to the end of the track.
-TNBSX1.JOG_SEEK_REVOLUTIONS = 2;
+//TNBSX1.JOG_SEEK_REVOLUTIONS = 2;
+TNBSX1.JOG_SEEK_REVOLUTIONS = 50;
 
 
 ////////////////////////////////////////////////////////////////////////
@@ -40,13 +41,14 @@ TNBSX1.DECK_COUNT = 2;
 //TNBSX1.JOG_RESOLUTION = 148; // measured/estimated
 //TNBSX1.JOG_RESOLUTION = 240; // SX1: 240 codes per 360 turn: measured/estimated
 // testing jogwheel smoother reaction:
-TNBSX1.JOG_RESOLUTION = 148; // SX1: 240 codes per 360 turn: measured/estimated
+TNBSX1.JOG_RESOLUTION = 240; // SX1: 240 codes per 360 turn: measured/estimated
 TNBSX1.SHIFT_OFFSET = 0x1E;  // 1E hex: 30 decimal.
 
 
 // Jog constants
-// SX1 jog code: FF turn: 0x01 (1 dec). REWIND turn: 0x7F (127 dec.)
+// SX1 jog code: ForWard turn: 0x01 (1 dec). ReWind turn: 0x7F (127 dec.)
 // SX1: 0x40 = 64 (dec)
+//TNBSX1.MIDI_JOG_DELTA_BIAS = 0x40;
 TNBSX1.MIDI_JOG_DELTA_BIAS = 0x40; // center value of relative movements
 // SX1: not sure below value: 3F (hex) = 63 (dec)
 TNBSX1.MIDI_JOG_DELTA_RANGE = 0x3F; // both forward (= positive) and reverse (= negative)
@@ -54,7 +56,7 @@ TNBSX1.MIDI_JOG_DELTA_RANGE = 0x3F; // both forward (= positive) and reverse (= 
 
 // Mixxx constants
 //TNBSX1.MIXXX_JOG_RANGE = 3.0;
-TNBSX1.MIXXX_JOG_RANGE = 1.0;
+TNBSX1.MIXXX_JOG_RANGE = 0.5;
 TNBSX1.MIXXX_LOOP_POSITION_UNDEFINED = -1;
 
 
@@ -87,7 +89,7 @@ TNBSX1.BUTTONMAP_CH0_CH1 = {
     play: [0x4A, 0x4C],
     cue: [0x91, 0x92],
     sync: [0x44, 0x46],
-	search: [0x00, 0x00], // SX1: set to x00, (conflict with tempoDown  RDJ2 values: [0x1A, 0x56]
+	search: [0x00, 0x33], // SX1: set to x33 same as Shift 1 button., (conflict with tempoDown  RDJ2 values: [0x1A, 0x56]
 	scratch: [0x48, 0x35],  // SX1: we assume vinyl button == scratch
 	fxdrywet: [0x1C, 0x58],
     bendminus: [0x00, 0x00], //SX1  tempo - ??
@@ -160,8 +162,10 @@ TNBSX1.isButtonPressed = function(midiValue) {
 
 /* Custom buttons */
 
+// SX1 SHIFT1 button.
+// It applies both for leftDeck and rightDeck controls. (activating GREEN color function when available)
 TNBSX1.ShiftButton = function(options) {
-	console.log("SX1: " + options);
+	
     this.state = false;
     this.connectedContainers = [];
     components.Button.call(this, options);
@@ -198,7 +202,7 @@ TNBSX1.ShiftButton.prototype = new components.Button({
 
 
 // SX1 SHIFT2 button.
-// It applies both for leftDeck and rightDeck controls. (activating blue color function when available)
+// It applies both for leftDeck and rightDeck controls. (activating BLUE color function when available)
 TNBSX1.Shift2Button = function(options) {
 	console.log("SX1: " + options);
     this.state = false;
@@ -382,9 +386,9 @@ TNBSX1.LoopActiveButton.prototype = new components.Button({
 // Knobs                                                              //
 ////////////////////////////////////////////////////////////////////////
 
-TNBSX1.MIDI_KNOB_INC = 0x41;
-TNBSX1.MIDI_KNOB_DEC = 0x3F;
-TNBSX1.MIDI_KNOB_DELTA_BIAS = 0x40; // center value of relative movements
+TNBSX1.MIDI_KNOB_INC = 0x01; // 0x41 in RDJ2
+TNBSX1.MIDI_KNOB_DEC = 0x7F; // x7f in RDJ2
+TNBSX1.MIDI_KNOB_DELTA_BIAS = 0x3f; // center value of relative movements x40 in RDJ2
 //TNBSX1.MIDI_KNOB_STEPS = 20;  // 20 is full knob's rotation (360deg)
 TNBSX1.MIDI_KNOB_STEPS = 16;    // 16 is more like volume knobs
 
@@ -426,11 +430,16 @@ TNBSX1.JOGMODES = {
     trax: 4,
 };
 
+//SX1:
+// Controller sends value 1 when jog spinning ForWard
+// Controller sends value 127 when spinning backwards
+// Added 128 - value.... 
 TNBSX1.getJogDeltaValue = function(value) {
     if (value === 0x00) {
         return 0x00;
     } else {
-        return value - TNBSX1.MIDI_JOG_DELTA_BIAS;
+//      return value - TNBSX1.MIDI_JOG_DELTA_BIAS;
+        return 128 - value - TNBSX1.MIDI_JOG_DELTA_BIAS;
     }
 };
 
@@ -687,10 +696,13 @@ TNBSX1.JogModeSelector.prototype = new components.Component({
             this.setTraxMode(false);
         }
     },
+	// SX1: it seems than shift button set the trax jogwheel mode.
     shift: function() {
         var isLibraryModeEnabled = engine.getValue("[Master]", "maximize_library");
         if (!isLibraryModeEnabled) {
-            this.setTraxMode(true);
+ //         this.setTraxMode(true);
+            this.setTraxMode(false);
+			this.jogMode = TNBSX1.JOGMODES.search;
         }
     },
 });
@@ -715,8 +727,9 @@ TNBSX1.Deck.prototype.onJogTouch = function(channel, control, value) {
 
 TNBSX1.Deck.prototype.onJogSpin = function(channel, control, value) {
     var currentJogMode =  this.jogModeSelector.jogMode;
-	TNBSX1.logInfo("SX1 value for currentJogMode: " + currentJogMode);
+	TNBSX1.logDebug("SX1 DEBUG: value for currentJogMode: " + currentJogMode);
     var jogDelta = TNBSX1.getJogDeltaValue(value);
+	TNBSX1.logInfo("SX1 value for jogSpin: " + value);
 	TNBSX1.logInfo("SX1 value for jogDelta: " + jogDelta);
 
     if (currentJogMode === TNBSX1.JOGMODES.vinyl) {
@@ -747,18 +760,20 @@ TNBSX1.Deck.prototype.onJogSpin = function(channel, control, value) {
         }
         var direction;
         var scaledDeltaAbs;
-        if (scaledDelta < 0.0) {
+        if (scaledDelta > 0.0) {
             direction = 1.0;
-            scaledDeltaAbs = -scaledDelta;
+            scaledDeltaAbs = scaledDelta;
         } else {
             direction = -1.0;
-            scaledDeltaAbs = scaledDelta;
+            scaledDeltaAbs = -scaledDelta;
         }
         var scaledDeltaPow = direction * Math.pow(scaledDeltaAbs, jogExponent);
         var jogValue = TNBSX1.MIXXX_JOG_RANGE * scaledDeltaPow;
         this.setValue("jog", jogValue);
 		TNBSX1.logInfo("SX1 value for scaledDelta: " + scaledDelta);
 		TNBSX1.logInfo("SX1 value for direction: " + direction);
+		TNBSX1.logInfo("SX1 setting jogValue as: " + TNBSX1.MIXXX_JOG_RANGE + " * " + scaledDeltaPow + " = " + jogValue);
+		
     } else {
         TNBSX1.logError("onJogSpin unknown mode error!");
     }
@@ -833,13 +848,16 @@ TNBSX1.TraxKnob.prototype = new components.Encoder({
     group: "[Library]",
     unshift: function() {
         this.inKey = "MoveVertical";
+		console.log("move vertical");
     },
     shift: function() {
         this.inKey = "ScrollVertical";
+		console.log("SCROLL vertical");
     },
     input: function(channel, control, value) {
         var knobDelta = TNBSX1.getKnobDelta(value);
         this.inSetValue(knobDelta);
+		console.log("browse encoder: " + knobDelta);		
     }
 });
 
