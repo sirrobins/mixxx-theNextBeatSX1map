@@ -382,6 +382,26 @@ TNBSX1.LoopActiveButton.prototype = new components.Button({
 });
 
 
+/* SX1 Custom HEAD button. Sets HeadPhone MIX knob. ON (1) OFF (-1) */
+
+TNBSX1.HeadphoneMixButton = function(options) {
+    components.Button.call(this, options);
+};
+TNBSX1.HeadphoneMixButton.prototype = new components.Button({
+    input: function(group, control, value) {
+		const currentHMix = engine.getParameter("[Master]", "headMix");
+    TNBSX1.logDebug("OLD Value for [Master].headMix: " + currentHMix);
+	
+
+       if (currentHMix <= 0) {
+			engine.setParameter("[Master]", "headMix", 1);
+       }  else {
+			engine.setParameter("[Master]", "headMix", -1);
+       }
+    TNBSX1.logDebug("Value for [Master].headMix MODIFIED TO: " + currentHMix);
+    }
+});
+
 ////////////////////////////////////////////////////////////////////////
 // Knobs                                                              //
 ////////////////////////////////////////////////////////////////////////
@@ -541,6 +561,7 @@ TNBSX1.LoadButton.prototype = new components.Button({
     outKey: "track_loaded",
     unshift: function() {
         this.inKey = "LoadSelectedTrack";
+		
     },
     shift: function() {
         this.inKey = "eject";
@@ -998,8 +1019,19 @@ TNBSX1.init = function(id, debug) {
 
     TNBSX1.rightShiftButton.connectContainer(TNBSX1.fx2);
     TNBSX1.rightShiftButton.connectContainer(TNBSX1.trax);
+	
+
+    // left and right shift button
+    TNBSX1.headphoneMixButton = new TNBSX1.HeadphoneMixButton([0x90, 0x0D]);
+
+
+	
 };
 
 TNBSX1.shutdown = function() {
     TNBSX1.logInfo("Shutting down controller");
+	   // turn off all LEDs
+   for (let i = 1; i <= 118; i++) {
+        midi.sendShortMsg(0x90, i, 0x00);
+    }
 };
