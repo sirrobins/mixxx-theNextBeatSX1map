@@ -109,9 +109,10 @@ TNBSX1.BUTTONMAP_CH0_CH1 = {
 	
 };
 
-// SX1: Not sure if this is userful in SX1
+
 TNBSX1.KNOBMAP_CH0_CH1 = {
-    loopSize: [0x28, 0x63],     //this is the shifted Dry/Wet Knob
+    loopSize: [0x28, 0x63],     //RDJ2: this is the shifted Dry/Wet Knob // SX1: Not sure if this is userful in SX1
+	lowEQ: [0x14, 0x15],     //SX1 added function: this is Low EQ Knob > when shifted, changes Mid EQ Knob
 };
 
 
@@ -139,7 +140,11 @@ TNBSX1.logError = function(msg) {
 
 
 ////////////////////////////////////////////////////////////////////////
-// Buttons                                                            //
+//                                                                    //
+//       BUTTONS                                                      //
+//                    BUTTONS                                         //
+//                                   BUTTONS                          //
+//                                                                    //
 ////////////////////////////////////////////////////////////////////////
 
 // SX1: This seems the value code for outgoing midi on/off signals (leds on/off)
@@ -292,10 +297,10 @@ TNBSX1.LoopOutButton.prototype = new components.Button({
 
 
 // SX1 added custom button: TEMPO +
-TNBSX1.tempoUpButton = function(options) {
+TNBSX1.TempoUpButton = function(options) {
     components.Button.call(this, options);
 };
-TNBSX1.tempoUpButton.prototype = new components.Button({
+TNBSX1.TempoUpButton.prototype = new components.Button({
     outKey: "bpm_up_small",
     unshift: function() {
         this.inKey = "bpm_up_small";
@@ -306,10 +311,10 @@ TNBSX1.tempoUpButton.prototype = new components.Button({
 });
 
 // SX1 added custom button: TEMPO -
-TNBSX1.tempoDownButton = function(options) {
+TNBSX1.TempoDownButton = function(options) {
     components.Button.call(this, options);
 };
-TNBSX1.tempoDownButton.prototype = new components.Button({
+TNBSX1.TempoDownButton.prototype = new components.Button({
     outKey: "bpm_up_small",
     unshift: function() {
         this.inKey = "bpm_down_small";
@@ -334,10 +339,10 @@ TNBSX1.AutoLoopButton.prototype = new components.Button({
 });
 
 // SX1 added custom button: Loop Double (unShift) >  HotCue1 set (shift) > HotCue1 unSet (shift2)
-TNBSX1.loopSizeUpButton = function(options) {
+TNBSX1.LoopSizeUpButton = function(options) {
     components.Button.call(this, options);
 };
-TNBSX1.loopSizeUpButton.prototype = new components.Button({
+TNBSX1.LoopSizeUpButton.prototype = new components.Button({
     outKey: "loop_double",
     unshift: function() {
         this.inKey = "loop_double";
@@ -351,10 +356,10 @@ TNBSX1.loopSizeUpButton.prototype = new components.Button({
 });
 
 // SX1 added custom button: LOOP HALVE  HotCue1 set (shift). HotCue1 unSet (shift2)
-TNBSX1.loopSizeDownButton = function(options) {
+TNBSX1.LoopSizeDownButton = function(options) {
     components.Button.call(this, options);
 };
-TNBSX1.loopSizeDownButton.prototype = new components.Button({
+TNBSX1.LoopSizeDownButton.prototype = new components.Button({
     outKey: "loop_halve",
     unshift: function() {
         this.inKey = "loop_halve";
@@ -395,20 +400,30 @@ TNBSX1.HeadphoneMixButton.prototype = new components.Button({
 
        if (currentHMix <= 0) {
 			engine.setParameter("[Master]", "headMix", 1);
+			    const currentHMix = engine.getParameter("[Master]", "headMix");
+				TNBSX1.logDebug("Value for [Master].headMix MODIFIED TO: " + currentHMix);
        }  else {
 			engine.setParameter("[Master]", "headMix", -1);
+			    const currentHMix = engine.getParameter("[Master]", "headMix");
+				TNBSX1.logDebug("Value for [Master].headMix MODIFIED TO: " + currentHMix);
        }
-    TNBSX1.logDebug("Value for [Master].headMix MODIFIED TO: " + currentHMix);
+
     }
 });
 
+
+
 ////////////////////////////////////////////////////////////////////////
-// Knobs                                                              //
+//                                                                    //
+//       KNOBS                                                        //
+//                    KNOBS                                           //
+//                                   KNOBS                            //
+//                                                                    //
 ////////////////////////////////////////////////////////////////////////
 
 TNBSX1.MIDI_KNOB_INC = 0x01; // 0x41 in RDJ2
 TNBSX1.MIDI_KNOB_DEC = 0x7F; // x7f in RDJ2
-TNBSX1.MIDI_KNOB_DELTA_BIAS = 0x3f; // center value of relative movements x40 in RDJ2
+TNBSX1.MIDI_KNOB_DELTA_BIAS = 0x3F; // center value of relative movements x40 in RDJ2
 //TNBSX1.MIDI_KNOB_STEPS = 20;  // 20 is full knob's rotation (360deg)
 TNBSX1.MIDI_KNOB_STEPS = 16;    // 16 is more like volume knobs
 
@@ -421,7 +436,10 @@ TNBSX1.knobInput = function(channel, control, value) {
     this.inSetParameter(this.inGetParameter() + knobDelta / TNBSX1.MIDI_KNOB_STEPS);
 };
 
+
 /* Custom knobs */
+/* Custom knobs */
+
 TNBSX1.LoopSizeKnob = function(options) {
     components.Pot.call(this, options);
 };
@@ -437,9 +455,37 @@ TNBSX1.LoopSizeKnob.prototype = new components.Pot({
     }
 });
 
+TNBSX1.LowEQKnob = function(options) {
+    components.Pot.call(this, options);
+};
+TNBSX1.LowEQKnob.prototype = new components.Pot({
+    group: "[EqualizerRack1_[Channel2]_Effect1]",
+    unshift: function() {
+        this.inKey = "parameter1";
+    },
+    shift: function() {
+        this.inKey = "parameter2";
+    },
+    input: function(channel, control, value) {
+
+		var valueEQParm = value * 0.007874015748031;
+
+		TNBSX1.logDebug("Value calculated for Parameter: " + valueEQParm);
+
+ 		this.inSetParameter(valueEQParm);
+    }
+});
+
+
+
+
 
 ////////////////////////////////////////////////////////////////////////
+//                                                                    //
 // Decks                                                              //
+//            Decks                                                   //
+//                         Decks                                      //
+//                                   Decks                            //
 ////////////////////////////////////////////////////////////////////////
 
 TNBSX1.JOGMODES = {
@@ -488,6 +534,12 @@ TNBSX1.Deck = function(number) {
         TNBSX1.BUTTONMAP_CH0_CH1.search[number - 1],
         TNBSX1.BUTTONMAP_CH0_CH1.scratch[number - 1],
         TNBSX1.BUTTONMAP_CH0_CH1.fxdrywet[number - 1]);
+	
+	// NEW april 2025!! SX1: added Mid EQ Knob (shifted Low EQ)
+	this.lowEQKnob = new TNBSX1.LowEQKnob({
+	    midi: [0xB0, TNBSX1.KNOBMAP_CH0_CH1.lowEQ[number - 1]],
+        group: "[EqualizerRack1_[Channel" + number + "]" + "_Effect1]",
+    });
 
     //loops
     this.loopsizeKnob = new TNBSX1.LoopSizeKnob([0xB0, TNBSX1.KNOBMAP_CH0_CH1.loopSize[number - 1]]);
@@ -497,15 +549,15 @@ TNBSX1.Deck = function(number) {
     this.loopActiveButton = new TNBSX1.LoopActiveButton([0x90, TNBSX1.BUTTONMAP_CH0_CH1.loopactive[number - 1]]);
 	
 	// SX1 added tempo + - buttons for bpm_down
-	this.tempoUpButton = new TNBSX1.tempoUpButton([0x90, TNBSX1.BUTTONMAP_CH0_CH1.tempoUp[number - 1]]);
-    this.tempoDownButton = new TNBSX1.tempoDownButton([0x90, TNBSX1.BUTTONMAP_CH0_CH1.tempoDown[number - 1]]);
+	this.tempoUpButton = new TNBSX1.TempoUpButton([0x90, TNBSX1.BUTTONMAP_CH0_CH1.tempoUp[number - 1]]);
+    this.tempoDownButton = new TNBSX1.TempoDownButton([0x90, TNBSX1.BUTTONMAP_CH0_CH1.tempoDown[number - 1]]);
 	
 	// SX1 added loopSize Up/Down + - buttons 
 	// UNSHIFT: Double/halve loop size
 	// SHIFT: HotCue 1, 3 set/go
 	// SHIFT: Unset HotCue 1, 3.
-	this.loopSizeUpButton = new TNBSX1.loopSizeUpButton([0x90, TNBSX1.BUTTONMAP_CH0_CH1.loopSizeUp[number - 1]]);
-    this.loopSizeDownButton = new TNBSX1.loopSizeDownButton([0x90, TNBSX1.BUTTONMAP_CH0_CH1.loopSizeDown[number - 1]]);	
+	this.loopSizeUpButton = new TNBSX1.LoopSizeUpButton([0x90, TNBSX1.BUTTONMAP_CH0_CH1.loopSizeUp[number - 1]]);
+    this.loopSizeDownButton = new TNBSX1.LoopSizeDownButton([0x90, TNBSX1.BUTTONMAP_CH0_CH1.loopSizeDown[number - 1]]);	
 	
 
     //effect assignment switches
@@ -944,7 +996,11 @@ TNBSX1.Trax.prototype = new components.ComponentContainer();
 
 
 ////////////////////////////////////////////////////////////////////////
+//                                                                    //
+//                                                                    //
 // Mixxx Callback Functions                                           //
+//                                                                    //
+//                                                                    //
 ////////////////////////////////////////////////////////////////////////
 
 TNBSX1.init = function(id, debug) {

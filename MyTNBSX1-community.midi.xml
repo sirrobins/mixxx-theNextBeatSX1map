@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <MixxxControllerPreset mixxxVersion="2.6+" schemaVersion="1">
     <info>
-        <name>TheNextBeatSX1-community</name>
+        <name>TheNextBeatSX1-12</name>
         <author>sirrobins</author>
         <description>Collaborative Map for TNB SX1</description>
     </info>
@@ -413,6 +413,26 @@
                 </options>
             </control>
             <control>
+                <group>[EqualizerRack1_[Channel1]_Effect1]</group>
+                <key>TNBSX1.leftDeck.mediumEQKnob.input</key>
+                <description>SX1:Medium EQ Knob</description>
+                <status>0xB0</status>
+                <midino>0x1C</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>EqualizerRack1_[Channel1]_Effect1]</group>
+                <key>TNBSX1.leftDeck.mediumEQKnob.input</key>
+                <description>SX1:Medium EQ Knob</description>
+                <status>0xB0</status>
+                <midino>0x1D</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
                 <group>[Channel1]</group>
                 <key>TNBSX1.leftDeck.loopsizeKnob.input</key>
                 <description>SX1: N/A x28 in dj2</description>
@@ -556,16 +576,7 @@
                     <script-binding/>
                 </options>
             </control>
-            <control>
-                <group>[Master]</group>
-                <key>headMix</key>
-                <description>MIDI Learned from 2 messages.</description>
-                <status>0x90</status>
-                <midino>0x0D</midino>
-                <options>
-                    <switch/>
-                </options>
-            </control>
+
             <control>
                 <group>[Channel2]</group>
                 <key>TNBSX1.rightDeck.loopSizeUpButton.input</key>
@@ -597,21 +608,22 @@
             </control>
             <control>
                 <group>[EqualizerRack1_[Channel1]_Effect1]</group>
-                <key>parameter1</key>
-                <description>SX1: OK</description>
+                <key>TNBSX1.leftDeck.lowEQKnob.input</key>
+                <description>SX1:Low EQ and custom added Mid EQ</description>
                 <status>0xB0</status>
                 <midino>0x14</midino>
                 <options>
-                    <normal/>
+                    <script-binding/>
                 </options>
             </control>
             <control>
                 <group>[EqualizerRack1_[Channel2]_Effect1]</group>
-                <key>parameter1</key>
+                <key>TNBSX1.rightDeck.lowEQKnob.input</key>
+                <description>SX1:Low EQ and custom added Mid EQ</description>
                 <status>0xB0</status>
                 <midino>0x15</midino>
                 <options>
-                    <normal/>
+                    <script-binding/>
                 </options>
             </control>
             <control>
@@ -680,6 +692,18 @@
                     <script-binding/>
                 </options>
             </control>
+
+            <control>
+                <group>[Master]</group>
+                <key>TNBSX1.headphoneMixButton.input</key>
+                <description>SX1: SX1 Custom HEAD button. Sets HeadPhone MIX knob. ON (1) OFF (-1)</description>
+                <status>0x90</status>
+                <midino>0x0D</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+
             <control>
                 <group>[Channel1]</group>
                 <key>TNBSX1.leftDeck.syncButton.input</key>
@@ -828,7 +852,7 @@
                 <options>
                     <normal/>
                 </options>
-            </control>	
+            </control>
             <control>
                 <group>[Channel2]</group>
                 <key>TNBSX1.rightDeck.jogModeSelector.input</key>
