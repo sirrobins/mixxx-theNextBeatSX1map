@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <MixxxControllerPreset mixxxVersion="2.6+" schemaVersion="1">
     <info>
-        <name>TheNextBeatSX1-12</name>
+        <name>TheNextBeatSX1Comm.v1.5</name>
         <author>sirrobins</author>
         <description>Collaborative Map for TNB SX1</description>
     </info>
@@ -12,16 +12,6 @@
             <file filename="MyTNBSX1-community-scripts.js" functionprefix="TNBSX1"/>
         </scriptfiles>
         <controls>
-            <control>
-                <group>[EqualizerRack1_[Channel2]_Effect1]</group>
-                <key>TNBSX1.rightDeck.highKillQuickEffectButton.input</key>
-                <description>SX1: N/A  RDJ2: x50</description>
-                <status>0x90</status>
-                <midino>0x00</midino>
-                <options>
-                    <script-binding/>
-                </options>
-            </control>
             <control>
                 <group>[Channel1]</group>
                 <key>TNBSX1.fx1.effectFocusButton.input</key>
@@ -145,9 +135,9 @@
             <control>
                 <group>[Channel2]</group>
                 <key>TNBSX1.fx2.enableButtons[1].input</key>
-                <description>SX1: PENDING N/A</description>
+                <description>SX1: Enable Disable EF1_EU2_Effect1</description>
                 <status>0x90</status>
-                <midino>0x00</midino>
+                <midino>0x45</midino>
                 <options>
                     <script-binding/>
                 </options>
@@ -155,7 +145,7 @@
             <control>
                 <group>[Channel2]</group>
                 <key>TNBSX1.rightDeck.jogModeSelector.input</key>
-                <description>SX1: NA/ D02 Vinyl -- SEARCH SHIFT -- DJ2 value x56: comflict</description>
+                <description>SX1: NA/ D02 Vinyl -- SEARCH SHIFT -- DJ2 value x56: conflict</description>
                 <status>0x90</status>
                 <midino>0x00</midino>
                 <options>
@@ -402,22 +392,12 @@
                     <script-binding/>
                 </options>
             </control>
-            <control>
-                <group>[QuickEffectRack1_[Channel2]]</group>
-                <key>super1</key>
-                <description>SX1: N/A DJ2: x5d</description>
+             <control>
+                <group>[QuickEffectRack1_[Channel1]]</group>
+                <key>TNBSX1.leftDeck.ffx1Knob.input</key>
+                <description>SX1:Filter FX EQ Knob</description>
                 <status>0xB0</status>
-                <midino>0x00</midino>
-                <options>
-                    <normal/>
-                </options>
-            </control>
-            <control>
-                <group>[EqualizerRack1_[Channel1]_Effect1]</group>
-                <key>TNBSX1.leftDeck.mediumEQKnob.input</key>
-                <description>SX1:Medium EQ Knob</description>
-                <status>0xB0</status>
-                <midino>0x1C</midino>
+                <midino>0x16</midino>
                 <options>
                     <script-binding/>
                 </options>
@@ -627,10 +607,11 @@
                 </options>
             </control>
             <control>
-                <group>[Channel1]</group>
-                <key>TNBSX1.fx1.knobs[1].input</key>
+                <group>[QuickEffectRack1_[Channel2]]</group>
+                <key>TNBSX1.rightDeck.ffx2Knob.input</key>
+                <description>SX1:Filter FX EQ Knob</description>
                 <status>0xB0</status>
-                <midino>0x16</midino>
+                <midino>0x1C</midino>
                 <options>
                     <script-binding/>
                 </options>
@@ -677,7 +658,7 @@
                 <key>TNBSX1.leftDeck.jogModeSelector.input</key>
                 <description>D01 -- FX DRY/WET -- NOT AVAILABLE</description>
                 <status>0x90</status>
-                <midino>0x1B</midino>
+                <midino>0x00</midino>
                 <options>
                     <script-binding/>
                 </options>
@@ -687,7 +668,7 @@
                 <key>TNBSX1.trax.traxButton.input</key>
                 <description>SX1: N/A x1e in dj2</description>
                 <status>0x90</status>
-                <midino>0x1E</midino>
+                <midino>0x1e</midino>
                 <options>
                     <script-binding/>
                 </options>
@@ -695,7 +676,7 @@
 
             <control>
                 <group>[Master]</group>
-                <key>TNBSX1.headphoneMixButton.input</key>
+                <key>TNBSX1.center.headphoneMixButton.input</key>
                 <description>SX1: SX1 Custom HEAD button. Sets HeadPhone MIX knob. ON (1) OFF (-1)</description>
                 <status>0x90</status>
                 <midino>0x0D</midino>
@@ -727,7 +708,7 @@
                 <key>TNBSX1.fx1.enableButtons[1].input</key>
                 <description>SX1: N/A x25 in dj2</description>
                 <status>0x90</status>
-                <midino>0x25</midino>
+                <midino>0x43</midino>
                 <options>
                     <script-binding/>
                 </options>
@@ -864,6 +845,16 @@
                 </options>
             </control>
             <control>
+                <group>[Channel2]</group>
+                <key>TNBSX1.rightDeck.jogModeSelector.input</key>
+                <description>D02 Vinyl -- SCRATCH -- NO SHIFT </description>
+                <status>0x80</status>
+                <midino>0x35</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
                 <group>[Channel1]</group>
                 <key>TNBSX1.leftDeck.playButton.input</key>
                 <status>0x90</status>
@@ -875,9 +866,9 @@
             <control>
                 <group>[Channel1]</group>
                 <key>TNBSX1.leftDeck.jogModeSelector.input</key>
-                <description>D01 Vinyl -- SEARCH SHIFT --</description>
+                <description>D01 Vinyl -- SEARCH SHIFT -- N/A 0x38 in RDJ2</description>
                 <status>0x90</status>
-                <midino>0x38</midino>
+                <midino>0x00</midino>
                 <options>
                     <script-binding/>
                 </options>
@@ -885,9 +876,9 @@
             <control>
                 <group>[Channel1]</group>
                 <key>TNBSX1.leftDeck.jogModeSelector.input</key>
-                <description>D01 Vinyl -- SCRATCH SHIFT --</description>
+                <description>D01 Vinyl -- SCRATCH SHIFT -- N/A 0x39 in rdj2</description>
                 <status>0x90</status>
-                <midino>0x39</midino>
+                <midino>0x00</midino>
                 <options>
                     <script-binding/>
                 </options>
@@ -895,9 +886,9 @@
             <control>
                 <group>[Channel1]</group>
                 <key>TNBSX1.leftDeck.jogModeSelector.input</key>
-                <description>D01 -- FX DRY/WET SHIFT -- NOT AVALIABLE</description>
+                <description>D01 -- FX DRY/WET SHIFT -- NOT AVALIABLE 3A in RDJ2</description>
                 <status>0x90</status>
-                <midino>0x3A</midino>
+                <midino>0x00</midino>
                 <options>
                     <script-binding/>
                 </options>
@@ -1017,8 +1008,9 @@
             <control>
                 <group>[Channel2]</group>
                 <key>TNBSX1.fx2.enableButtons[2].input</key>
+				<description>SX1: N/A x43 in RDJ2</description>
                 <status>0x90</status>
-                <midino>0x43</midino>
+                <midino>0x00</midino>
                 <options>
                     <script-binding/>
                 </options>
@@ -1026,8 +1018,9 @@
             <control>
                 <group>[Channel2]</group>
                 <key>TNBSX1.fx2.knobs[2].input</key>
+				<description>SX1: N/A x43 in RDJ2</description>
                 <status>0xB0</status>
-                <midino>0x43</midino>
+                <midino>0x00</midino>
                 <options>
                     <script-binding/>
                 </options>
@@ -1053,8 +1046,9 @@
             <control>
                 <group>[Channel2]</group>
                 <key>TNBSX1.fx2.effectFocusButton.input</key>
+				<description>SX1: N/A conflict: x45 in RDJ2</description>
                 <status>0x90</status>
-                <midino>0x45</midino>
+                <midino>0x00</midino>
                 <options>
                     <script-binding/>
                 </options>
@@ -1091,6 +1085,16 @@
                 <key>TNBSX1.leftDeck.jogModeSelector.input</key>
                 <description>D01 Vinyl  -- SCRATCH -- NO SHIFT</description>
                 <status>0x90</status>
+                <midino>0x48</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel1]</group>
+                <key>TNBSX1.leftDeck.jogModeSelector.input</key>
+                <description>D01 Vinyl  -- SCRATCH -- NO SHIFT</description>
+                <status>0x80</status>
                 <midino>0x48</midino>
                 <options>
                     <script-binding/>
@@ -1144,6 +1148,15 @@
                 </options>
             </control>
             <control>
+                <group>[Channel1]</group>
+                <key>TNBSX1.leftDeck.onJogTouch</key>
+                <status>0x80</status>
+                <midino>0x4D</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
                 <group>[Channel2]</group>
                 <key>TNBSX1.rightDeck.onJogTouch</key>
                 <status>0x90</status>
@@ -1153,12 +1166,21 @@
                 </options>
             </control>
             <control>
+                <group>[Channel2]</group>
+                <key>TNBSX1.rightDeck.onJogTouch</key>
+                <status>0x80</status>
+                <midino>0x4E</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
                 <group>[Library]</group>
-                <key>GoToItem</key>
+                <key>TNBSX1.center.browseEncButton.input</key>
                 <status>0x90</status>
                 <midino>0x4F</midino>
                 <options>
-                    <normal/>
+                    <script-binding/>
                 </options>
             </control>
             <control>
@@ -1231,22 +1253,13 @@
                     <script-binding/>
                 </options>
             </control>
+
             <control>
                 <group>[Channel2]</group>
                 <key>TNBSX1.rightDeck.jogModeSelector.input</key>
-                <description>D02 Vinyl -- SCRATCH SHIFT --</description>
+                <description>D02 -- FX DRY/WET SHIFT -- NOT AVALIABLE 58 in RDJ2</description>
                 <status>0x90</status>
-                <midino>0x57</midino>
-                <options>
-                    <script-binding/>
-                </options>
-            </control>
-            <control>
-                <group>[Channel2]</group>
-                <key>TNBSX1.rightDeck.jogModeSelector.input</key>
-                <description>D02 -- FX DRY/WET SHIFT -- NOT AVALIABLE</description>
-                <status>0x90</status>
-                <midino>0x58</midino>
+                <midino>0x00</midino>
                 <options>
                     <script-binding/>
                 </options>
@@ -1329,8 +1342,9 @@
             <control>
                 <group>[Channel2]</group>
                 <key>TNBSX1.fx2.enableButtons[1].input</key>
+				<description>SX1: N/A disabled. x66 in RDJ2. </description>
                 <status>0x90</status>
-                <midino>0x66</midino>
+                <midino>0x00</midino>
                 <options>
                     <script-binding/>
                 </options>
