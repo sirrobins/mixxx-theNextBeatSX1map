@@ -1,0 +1,156 @@
+<?xml version='1.0' encoding='utf-8'?>
+<MixxxControllerPreset mixxxVersion="2.6+" schemaVersion="1">
+    <info>
+        <name>TNB-SX1 Mixxx</name>
+        <description>TheNextBeat SX1 MIDI mapping</description>
+    </info>
+    <controller id="TheNextBeatSX1">
+        <scriptfiles>
+            <file filename="midi-components-0.0.js" functionprefix=""/>
+            <file filename="TheNextBeat-SX1-scripts.js" functionprefix="TheNextBeatSX1"/>
+        </scriptfiles>
+        <controls>
+            <control>
+                <group>[Channel2]</group>
+                <key>TheNextBeatSX1.container.d2AutoLoop.input</key>
+                <description>Deck 2 Auto Loop / Unload</description>
+                <status>0x90</status>
+                <midino>0x0C</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel2]</group>
+                <key>TheNextBeatSX1.container.d2LoopDouble.input</key>
+                <description>Deck 2 Loop Double / HotCue 1</description>
+                <status>0x90</status>
+                <midino>0x0E</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Master]</group>
+                <key>TheNextBeatSX1.container.shift1.input</key>
+                <description>Shift 1 (Green)</description>
+                <status>0x80</status>
+                <midino>0x33</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Master]</group>
+                <key>TheNextBeatSX1.container.shift1.input</key>
+                <description>Shift 1 (Green)</description>
+                <status>0x90</status>
+                <midino>0x33</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel2]</group>
+                <key>TheNextBeatSX1.container.d2Load.input</key>
+                <description>Deck 2 Load / HotCue 2</description>
+                <status>0x90</status>
+                <midino>0x34</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Master]</group>
+                <key>TheNextBeatSX1.container.shift2.input</key>
+                <description>Shift 2 (Blue)</description>
+                <status>0x80</status>
+                <midino>0x3C</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Master]</group>
+                <key>TheNextBeatSX1.container.shift2.input</key>
+                <description>Shift 2 (Blue)</description>
+                <status>0x90</status>
+                <midino>0x3C</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel1]</group>
+                <key>TheNextBeatSX1.container.d1Load.input</key>
+                <description>Deck 1 Load / Unload</description>
+                <status>0x90</status>
+                <midino>0x4B</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Library]</group>
+                <key>GoToItem</key>
+                <description>MIDI Learned from 2 messages.</description>
+                <status>0x80</status>
+                <midino>0x4F</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+            <control>
+                <group>[Library]</group>
+                <key>GoToItem</key>
+                <description>MIDI Learned from 2 messages.</description>
+                <status>0x90</status>
+                <midino>0x4F</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel1]</group>
+                <key>TheNextBeatSX1.container.d1LoopDouble.input</key>
+                <description>Deck 1 Loop Double / HotCue 1</description>
+                <status>0x90</status>
+                <midino>0x50</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel1]</group>
+                <key>TheNextBeatSX1.container.d1AutoLoop.input</key>
+                <description>Deck 1 Auto Loop / HotCue 2</description>
+                <status>0x90</status>
+                <midino>0x51</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel1]</group>
+                <key>TheNextBeatSX1.container.d1LoopHalve.input</key>
+                <description>Deck 1 Loop Halve / HotCue 3</description>
+                <status>0x90</status>
+                <midino>0x64</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel2]</group>
+                <key>TheNextBeatSX1.container.d2LoopHalve.input</key>
+                <description>Deck 2 Loop Halve / HotCue 3</description>
+                <status>0x90</status>
+                <midino>0x65</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+        </controls>
+        <outputs/>
+    </controller>
+</MixxxControllerPreset>
