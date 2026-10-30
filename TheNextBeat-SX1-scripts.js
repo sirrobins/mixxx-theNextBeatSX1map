@@ -167,6 +167,7 @@ TheNextBeatSX1.updateSyncLEDs = function () {
 
 // --- Loop LED Blinking State Tracker ---
 // This provides auto-loop button led blinking when on active loop.
+// --- Loop LED Blinking State Tracker ---
 TheNextBeatSX1.loopBlinkState = {
     1: { timerId: 0, ledState: false, midiNo: 0x51 },
     2: { timerId: 0, ledState: false, midiNo: 0x0C }
@@ -178,6 +179,7 @@ TheNextBeatSX1.onLoopEnabledChanged = function (value, group, key) {
     var statusByte = 0x90;
 
     if (value === 1) {
+        // --- LOOP ENABLED ---
         if (state.timerId === 0) {
             state.timerId = engine.beginTimer(300, function () {
                 if (!TheNextBeatSX1.shift1Active && !TheNextBeatSX1.shift2Active) {
@@ -187,6 +189,10 @@ TheNextBeatSX1.onLoopEnabledChanged = function (value, group, key) {
             });
         }
     } else {
+        // Track whether it was previously looping before turning off
+        var wasLooping = (state.timerId !== 0);
+
+        // --- LOOP EXITED / DISABLED ---
         if (state.timerId !== 0) {
             engine.stopTimer(state.timerId);
             state.timerId = 0;
@@ -195,6 +201,11 @@ TheNextBeatSX1.onLoopEnabledChanged = function (value, group, key) {
 
         if (!TheNextBeatSX1.shift1Active && !TheNextBeatSX1.shift2Active) {
             midi.sendShortMsg(statusByte, state.midiNo, 0x00);
+        }
+
+        // ONLY auto-deactivate slip mode if a loop was actually active and just got turned off
+        if (wasLooping && engine.getValue(group, 'slip_enabled') === 1) {
+            engine.setValue(group, 'slip_enabled', 0);
         }
     }
 };
@@ -260,15 +271,16 @@ TheNextBeatSX1.layers = {
         },
         fxOnOff: {
             default: { group: '[EffectRack1_EffectUnit1_Effect1]', inKey: 'enabled', outKey: 'enabled', type: 1 },
-            shift1:  { group: '[EffectRack1_EffectUnit1_Effect1]', inKey: 'enabled', outKey: 'enabled', type: 1 },
-            blue:    { group: '[EffectRack1_EffectUnit1_Effect1]', inKey: 'enabled', outKey: 'enabled', type: 1 }
+            shift1:  { group: '[EffectRack1_EffectUnit1_Effect2]', inKey: 'enabled', outKey: 'enabled', type: 1 },
+            blue:    { group: '[EffectRack1_EffectUnit1_Effect3]', inKey: 'enabled', outKey: 'enabled', type: 1 }
         },
         jogTouch: {
             default: { group: '[Channel1]', inKey: 'wheel' }
         },
         load: {
             default: { group: '[Channel1]', inKey: 'LoadSelectedTrack', outKey: 'track_loaded' },
-            shift1:  { group: '[Channel1]', inKey: 'eject', outKey: 'track_loaded' }
+            shift1:  { group: '[Channel1]', inKey: 'eject', outKey: 'track_loaded' },
+            blue:    { group: '[Channel1]', inKey: 'slip_enabled', type: 1 }
         },
         loopDouble: {
             default: { group: '[Channel1]', inKey: 'loop_double', outKey: 'loop_enabled' },
@@ -282,8 +294,8 @@ TheNextBeatSX1.layers = {
         },
         pfl: {
             default: { group: '[Channel1]', inKey: 'pfl', outKey: 'pfl', type: 1 },
-            shift1:  { group: '[Sampler2]', inKey: 'cue_gotoandplay', outKey: 'track_loaded' },
-            blue:    { group: '[Sampler4]', inKey: 'cue_gotoandplay', outKey: 'track_loaded' }
+            shift1:  { group: '[Sampler2]', inKey: 'cue_gotoandplay', outKey: 'play_latched' },
+            blue:    { group: '[Sampler4]', inKey: 'cue_gotoandplay', outKey: 'play_latched'}
         },
         play: {
             default: { group: '[Channel1]', inKey: 'play', outKey: 'play_indicator', type: 1 },
@@ -291,7 +303,9 @@ TheNextBeatSX1.layers = {
             blue:  { group: '[Channel1]', inKey: 'start_stop', outKey: 'play_indicator', type: 0 }
         },
         sync: {
-            default: { group: '[Channel1]', inKey: 'sync_enabled' }
+            default: { group: '[Channel1]', inKey: 'beatsync' },
+            shift1:  { group: '[Channel1]', inKey: 'sync_enabled' },
+            blue:  { group: '[Channel1]', inKey: 'sync_leader' }
         },
         tempoMinus: {
             default: { group: '[Channel1]', inKey: 'rate_perm_down_small', input: TheNextBeatSX1.handleTempoPress },
@@ -304,9 +318,9 @@ TheNextBeatSX1.layers = {
             blue:    { group: '[Channel1]', inKey: 'beatjump_forward' }
         },
         vinyl: {
-            default: { group: '[Channel1]', input: TheNextBeatSX1.toggleScratchMode },
-            shift1:  { group: '[Sampler1]', inKey: 'cue_gotoandplay', outKey: 'track_loaded' },
-            blue:    { group: '[Sampler3]', inKey: 'cue_gotoandplay', outKey: 'track_loaded' }
+            default: { group: '[Channel1]', input: TheNextBeatSX1.toggleScratchMode, type: 1 },
+            shift1:  { group: '[Sampler1]', inKey: 'cue_gotoandplay', outKey: 'play_latched'  },
+            blue:    { group: '[Sampler3]', inKey: 'cue_gotoandplay', outKey: 'play_latched' }
         }
     },
     deck2: {
@@ -323,15 +337,16 @@ TheNextBeatSX1.layers = {
         },
         fxOnOff: {
             default: { group: '[EffectRack1_EffectUnit2_Effect1]', inKey: 'enabled', outKey: 'enabled', type: 1 },
-            shift1:  { group: '[EffectRack1_EffectUnit2_Effect1]', inKey: 'enabled', outKey: 'enabled', type: 1 },
-            blue:    { group: '[EffectRack1_EffectUnit2_Effect1]', inKey: 'enabled', outKey: 'enabled', type: 1 }
+            shift1:  { group: '[EffectRack1_EffectUnit2_Effect2]', inKey: 'enabled', outKey: 'enabled', type: 1 },
+            blue:    { group: '[EffectRack1_EffectUnit2_Effect3]', inKey: 'enabled', outKey: 'enabled', type: 1 }
         },
         jogTouch: {
             default: { group: '[Channel2]', inKey: 'wheel' }
         },
         load: {
             default: { group: '[Channel2]', inKey: 'LoadSelectedTrack', outKey: 'track_loaded' },
-            shift1:  { group: '[Channel2]', inKey: 'eject', outKey: 'track_loaded' }
+            shift1:  { group: '[Channel2]', inKey: 'eject', outKey: 'track_loaded' },
+            blue:    { group: '[Channel2]', inKey: 'slip_enabled', type: 1 }
         },
         loopDouble: {
             default: { group: '[Channel2]', inKey: 'loop_double', outKey: 'loop_enabled' },
@@ -345,8 +360,8 @@ TheNextBeatSX1.layers = {
         },
         pfl: {
             default: { group: '[Channel2]', inKey: 'pfl', outKey: 'pfl', type: 1 },
-            shift1:  { group: '[Sampler2]', inKey: 'cue_gotoandplay', outKey: 'track_loaded' },
-            blue:    { group: '[Sampler4]', inKey: 'cue_gotoandplay', outKey: 'track_loaded' }
+            shift1:  { group: '[Sampler6]', inKey: 'cue_gotoandplay', outKey: 'play_latched'  },
+            blue:    { group: '[Sampler8]', inKey: 'cue_gotoandplay', outKey: 'play_latched'  }
         },
         play: {
             default: { group: '[Channel2]', inKey: 'play', outKey: 'play_indicator', type: 1 },
@@ -354,7 +369,9 @@ TheNextBeatSX1.layers = {
             blue:  { group: '[Channel2]', inKey: 'start_stop', outKey: 'play_indicator', type: 0 }
         },
         sync: {
-            default: { group: '[Channel2]', inKey: 'sync_enabled' }
+            default: { group: '[Channel2]', inKey: 'beatsync' },
+            shift1:  { group: '[Channel2]', inKey: 'sync_enabled' },
+            blue:  { group: '[Channel2]', inKey: 'sync_leader' }
         },
         tempoMinus: {
             default: { group: '[Channel2]', inKey: 'rate_perm_down_small', input: TheNextBeatSX1.handleTempoPress },
@@ -367,9 +384,9 @@ TheNextBeatSX1.layers = {
             blue:    { group: '[Channel2]', inKey: 'beatjump_forward' }
         },
         vinyl: {
-            default: { group: '[Channel2]', input: TheNextBeatSX1.toggleScratchMode },
-            shift1:  { group: '[Sampler1]', inKey: 'cue_gotoandplay', outKey: 'track_loaded' },
-            blue:    { group: '[Sampler3]', inKey: 'cue_gotoandplay', outKey: 'track_loaded' }
+            default: { group: '[Channel2]', input: TheNextBeatSX1.toggleScratchMode , type: 1},
+            shift1:  { group: '[Sampler5]', inKey: 'cue_gotoandplay', outKey: 'play_latched' },
+            blue:    { group: '[Sampler7]', inKey: 'cue_gotoandplay', outKey: 'play_latched' }
         }
     }
 };
@@ -459,6 +476,7 @@ if (TheNextBeatSX1.shift2Active) {
     }
 };
 
+//new in 1.1 (slip_mode is off when releasing jogTouch / jogWheel.)
 TheNextBeatSX1.jogTouch1 = function (channel, control, value, status, group) {
     if (value > 0 && TheNextBeatSX1.scratchEnabled[1]) {
         engine.scratchEnable(
@@ -469,7 +487,13 @@ TheNextBeatSX1.jogTouch1 = function (channel, control, value, status, group) {
             TheNextBeatSX1.scratchSettings.beta
         );
     } else {
+        // Touch released (or scratch disabled)
         engine.scratchDisable(1);
+
+        // Auto-deactivate slip mode on release if active
+        if (engine.getValue('[Channel1]', 'slip_enabled') === 1) {
+            engine.setValue('[Channel1]', 'slip_enabled', 0);
+        }
     }
 };
 
@@ -483,9 +507,18 @@ TheNextBeatSX1.jogTouch2 = function (channel, control, value, status, group) {
             TheNextBeatSX1.scratchSettings.beta
         );
     } else {
+        // Touch released (or scratch disabled)
         engine.scratchDisable(2);
+
+        // Auto-deactivate slip mode on release if active
+        if (engine.getValue('[Channel2]', 'slip_enabled') === 1) {
+            engine.setValue('[Channel2]', 'slip_enabled', 0);
+        }
     }
 };
+
+
+
 
 // 2. Custom LayerButton.
 //  It is developed supporting Toggles (Play/Pause, Pre-fader Listening PFL, Vynil/slip mode, sync, and Effects)
@@ -505,7 +538,7 @@ TheNextBeatSX1.LayerButton = class extends components.Button {
         if (!layerConfig) return;
 
         // Added 'enabled' to prevent clearing Effects toggles on layer switch
-        var persistentKeys = ['play', 'pfl', 'slip_enabled', 'sync_enabled', 'enabled'];
+        var persistentKeys = ['play', 'pfl', 'slip_enabled', 'sync_enabled', 'sync_leader', 'enabled'];
         if (this.inKey && this.group && persistentKeys.indexOf(this.inKey) === -1) {
             engine.setValue(this.group, this.inKey, 0);
         }
@@ -575,7 +608,7 @@ TheNextBeatSX1.init = function () {
 
     // Continue with your component container setup...
 
-    // Fire DJ 22-Packet LED Burst & Analog ADC Dump Trigger
+    // Fire  22-Packet LED Burst & Analog ADC Dump Trigger
     // an attempt to get initial faders and knobs status on startup. It does not work :(
     TheNextBeatSX1.sendInitSequence();
 
