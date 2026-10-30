@@ -10,12 +10,94 @@
             <file filename="TheNextBeat-SX1-scripts.js" functionprefix="TheNextBeatSX1"/>
         </scriptfiles>
         <controls>
+
+
+        <!-- ================= LIBRARY TRACK SCROLL ENCODER (0x1A) ================= -->
+<!-- midino 0x1A (26), Opcode 0xB (0xB0 Control Change) -->
+<control>
+    <status>0xB0</status>
+    <midino>0x1A</midino>
+    <group>[Playlist]</group>
+    <key>TheNextBeatSX1.libraryScroll</key>
+    <description>Library Track Navigation Encoder (CCW=Down, CW=Up)</description>
+    <options>
+        <script-binding/>
+    </options>
+</control>
+
+            <!-- ================= DECK 1 HIGH / MID EQ KNOB ================= -->
+<!-- midino 10 (0x0A), Opcode 0xB (0xB0 Control Change) -->
+<control>
+    <status>0xB0</status>
+    <midino>0x10</midino>
+    <group>[EqualizerRack1_[Channel1]_Effect1]</group>
+    <key>TheNextBeatSX1.eqHighKnob</key>
+    <description>Deck 1 High EQ / Mid EQ (Shift 1)</description>
+    <options>
+        <script-binding/>
+    </options>
+</control>
+
+<!-- ================= DECK 2 HIGH / MID EQ KNOB ================= -->
+<!-- midino 11 (0x0B), Opcode 0xB (0xB0 Control Change) -->
+<control>
+    <status>0xB0</status>
+    <midino>0x11</midino>
+    <group>[EqualizerRack1_[Channel2]_Effect1]</group>
+    <key>TheNextBeatSX1.eqHighKnob</key>
+    <description>Deck 2 High EQ / Mid EQ (Shift 1)</description>
+    <options>
+        <script-binding/>
+    </options>
+</control>
+
+            <control>
+                <group>[Channel1]</group>
+                <key>volume</key>
+                <description>MIDI Learned from 275 messages.</description>
+                <status>0xB0</status>
+                <midino>0x08</midino>
+                <options>
+                    <soft-takeover/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel2]</group>
+                <key>volume</key>
+                <description>MIDI Learned from 262 messages.</description>
+                <status>0xB0</status>
+                <midino>0x09</midino>
+                <options>
+                    <soft-takeover/>
+                </options>
+            </control>
+            <control>
+                <group>[Master]</group>
+                <key>crossfader</key>
+                <description>MIDI Learned from 276 messages.</description>
+                <status>0xB0</status>
+                <midino>0x0A</midino>
+                <options>
+                    <invert/>
+                    <soft-takeover/>
+                </options>
+            </control>
             <control>
                 <group>[Channel2]</group>
                 <key>TheNextBeatSX1.container.d2AutoLoop.input</key>
-                <description>Deck 2 Auto Loop / Unload</description>
+                <description>Deck 2 Auto Loop / HotCue 2</description>
                 <status>0x90</status>
                 <midino>0x0C</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Master]</group>
+                <key>TheNextBeatSX1.headMixButton</key>
+                <description>Headphone Mix Cue/Master Latching Toggle Switch</description>
+                <status>0x90</status>
+                <midino>0x0D</midino>
                 <options>
                     <script-binding/>
                 </options>
@@ -31,9 +113,79 @@
                 </options>
             </control>
             <control>
+                <group>[EqualizerRack1_[Channel1]_Effect1]</group>
+                <key>parameter1</key>
+                <description>MIDI Learned from 267 messages.</description>
+                <status>0xB0</status>
+                <midino>0x14</midino>
+                <options>
+                    <soft-takeover/>
+                </options>
+            </control>
+            <control>
+                <group>[EqualizerRack1_[Channel2]_Effect1]</group>
+                <key>parameter1</key>
+                <description>MIDI Learned from 268 messages.</description>
+                <status>0xB0</status>
+                <midino>0x15</midino>
+                <options>
+                    <soft-takeover/>
+                </options>
+            </control>
+            <control>
+                <group>[QuickEffectRack1_[Channel1]]</group>
+                <key>super1</key>
+                <description>MIDI Learned from 268 messages.</description>
+                <status>0xB0</status>
+                <midino>0x16</midino>
+                <options>
+                    <soft-takeover/>
+                </options>
+            </control>
+            <control>
+                <group>[Master]</group>
+                <key>gain</key>
+                <description>MIDI Learned from 268 messages.</description>
+                <status>0xB0</status>
+                <midino>0x17</midino>
+                <options>
+                    <soft-takeover/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel2]</group>
+                <key>TheNextBeatSX1.jogWheelTurn</key>
+                <description>Deck 2 Jog Wheel Turn</description>
+                <status>0xB0</status>
+                <midino>0x18</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel1]</group>
+                <key>TheNextBeatSX1.jogWheelTurn</key>
+                <description>Deck 1 Jog Wheel Turn</description>
+                <status>0xB0</status>
+                <midino>0x19</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[QuickEffectRack1_[Channel2]]</group>
+                <key>super1</key>
+                <description>MIDI Learned from 270 messages.</description>
+                <status>0xB0</status>
+                <midino>0x1C</midino>
+                <options>
+                    <soft-takeover/>
+                </options>
+            </control>
+            <control>
                 <group>[Master]</group>
                 <key>TheNextBeatSX1.container.shift1.input</key>
-                <description>Shift 1 (Green)</description>
+                <description>Shift 1 (Green) Release</description>
                 <status>0x80</status>
                 <midino>0x33</midino>
                 <options>
@@ -43,7 +195,7 @@
             <control>
                 <group>[Master]</group>
                 <key>TheNextBeatSX1.container.shift1.input</key>
-                <description>Shift 1 (Green)</description>
+                <description>Shift 1 (Green) Press</description>
                 <status>0x90</status>
                 <midino>0x33</midino>
                 <options>
@@ -53,7 +205,7 @@
             <control>
                 <group>[Channel2]</group>
                 <key>TheNextBeatSX1.container.d2Load.input</key>
-                <description>Deck 2 Load / HotCue 2</description>
+                <description>Deck 2 Load / Unload</description>
                 <status>0x90</status>
                 <midino>0x34</midino>
                 <options>
@@ -61,9 +213,39 @@
                 </options>
             </control>
             <control>
+                <group>[Channel2]</group>
+                <key>TheNextBeatSX1.container.d2Vinyl.input</key>
+                <description>Deck 2 Vinyl / Sampler 1 / Sampler 3</description>
+                <status>0x90</status>
+                <midino>0x35</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel1]</group>
+                <key>TheNextBeatSX1.container.d1Cue.input</key>
+                <description>Deck 1 Cue (Note Off)</description>
+                <status>0x80</status>
+                <midino>0x3B</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel1]</group>
+                <key>TheNextBeatSX1.container.d1Cue.input</key>
+                <description>Deck 1 Cue (Note On)</description>
+                <status>0x90</status>
+                <midino>0x3B</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
                 <group>[Master]</group>
                 <key>TheNextBeatSX1.container.shift2.input</key>
-                <description>Shift 2 (Blue)</description>
+                <description>Shift 2 (Blue) Release</description>
                 <status>0x80</status>
                 <midino>0x3C</midino>
                 <options>
@@ -73,9 +255,119 @@
             <control>
                 <group>[Master]</group>
                 <key>TheNextBeatSX1.container.shift2.input</key>
-                <description>Shift 2 (Blue)</description>
+                <description>Shift 2 (Blue) Press</description>
                 <status>0x90</status>
                 <midino>0x3C</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel1]</group>
+                <key>TheNextBeatSX1.container.d1Pfl.input</key>
+                <description>Deck 1 PFL / Sampler 2 / Sampler 4</description>
+                <status>0x90</status>
+                <midino>0x40</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel2]</group>
+                <key>TheNextBeatSX1.container.d2Cue.input</key>
+                <description>Deck 2 Cue (Note Off)</description>
+                <status>0x80</status>
+                <midino>0x42</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel2]</group>
+                <key>TheNextBeatSX1.container.d2Cue.input</key>
+                <description>Deck 2 Cue (Note On)</description>
+                <status>0x90</status>
+                <midino>0x42</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel1]</group>
+                <key>TheNextBeatSX1.container.d1FxOnOff.input</key>
+                <description>Deck 1 FX On/Off</description>
+                <status>0x90</status>
+                <midino>0x43</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel1]</group>
+                <key>TheNextBeatSX1.container.d1Sync.input</key>
+                <description>Deck 1 Sync</description>
+                <status>0x90</status>
+                <midino>0x44</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel2]</group>
+                <key>TheNextBeatSX1.container.d2FxOnOff.input</key>
+                <description>Deck 2 FX On/Off</description>
+                <status>0x90</status>
+                <midino>0x45</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel2]</group>
+                <key>TheNextBeatSX1.container.d2Sync.input</key>
+                <description>Deck 2 Sync</description>
+                <status>0x90</status>
+                <midino>0x46</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel2]</group>
+                <key>TheNextBeatSX1.container.d2Pfl.input</key>
+                <description>Deck 2 PFL / Sampler 2 / Sampler 4</description>
+                <status>0x90</status>
+                <midino>0x47</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel1]</group>
+                <key>TheNextBeatSX1.container.d1Vinyl.input</key>
+                <description>Deck 1 Vinyl / Sampler 1 / Sampler 3</description>
+                <status>0x90</status>
+                <midino>0x48</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel1]</group>
+                <key>TheNextBeatSX1.container.d1Play.input</key>
+                <description>Deck 1 Play / Pause (Note Off)</description>
+                <status>0x80</status>
+                <midino>0x4A</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel1]</group>
+                <key>TheNextBeatSX1.container.d1Play.input</key>
+                <description>Deck 1 Play / Pause (Note On)</description>
+                <status>0x90</status>
+                <midino>0x4A</midino>
                 <options>
                     <script-binding/>
                 </options>
@@ -91,23 +383,73 @@
                 </options>
             </control>
             <control>
-                <group>[Library]</group>
-                <key>GoToItem</key>
-                <description>MIDI Learned from 2 messages.</description>
+                <group>[Channel2]</group>
+                <key>TheNextBeatSX1.container.d2Play.input</key>
+                <description>Deck 2 Play / Pause (Note Off)</description>
                 <status>0x80</status>
-                <midino>0x4F</midino>
+                <midino>0x4C</midino>
                 <options>
-                    <normal/>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel2]</group>
+                <key>TheNextBeatSX1.container.d2Play.input</key>
+                <description>Deck 2 Play / Pause (Note On)</description>
+                <status>0x90</status>
+                <midino>0x4C</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel1]</group>
+                <key>TheNextBeatSX1.container.d1JogTouch.input</key>
+                <description>Deck 1 Jog Touch Release</description>
+                <status>0x80</status>
+                <midino>0x4D</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel1]</group>
+                <key>TheNextBeatSX1.container.d1JogTouch.input</key>
+                <description>Deck 1 Jog Touch Press</description>
+                <status>0x90</status>
+                <midino>0x4D</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel2]</group>
+                <key>TheNextBeatSX1.container.d2JogTouch.input</key>
+                <description>Deck 2 Jog Touch Release</description>
+                <status>0x80</status>
+                <midino>0x4E</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel2]</group>
+                <key>TheNextBeatSX1.container.d2JogTouch.input</key>
+                <description>Deck 2 Jog Touch Press</description>
+                <status>0x90</status>
+                <midino>0x4E</midino>
+                <options>
+                    <script-binding/>
                 </options>
             </control>
             <control>
                 <group>[Library]</group>
-                <key>GoToItem</key>
-                <description>MIDI Learned from 2 messages.</description>
+                <key>TheNextBeatSX1.libraryFocusToggle</key>
+                <description>Toggle Folders/Files Focus in Library</description>
                 <status>0x90</status>
                 <midino>0x4F</midino>
                 <options>
-                    <normal/>
+                    <script-binding/>
                 </options>
             </control>
             <control>
@@ -126,6 +468,46 @@
                 <description>Deck 1 Auto Loop / HotCue 2</description>
                 <status>0x90</status>
                 <midino>0x51</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel1]</group>
+                <key>TheNextBeatSX1.container.d1TempoPlus.input</key>
+                <description>Deck 1 Tempo Plus (Small / Big)</description>
+                <status>0x90</status>
+                <midino>0x53</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel1]</group>
+                <key>TheNextBeatSX1.container.d1TempoMinus.input</key>
+                <description>Deck 1 Tempo Minus (Small / Big)</description>
+                <status>0x90</status>
+                <midino>0x54</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel2]</group>
+                <key>TheNextBeatSX1.container.d2TempoPlus.input</key>
+                <description>Deck 2 Tempo Plus (Small / Big)</description>
+                <status>0x90</status>
+                <midino>0x55</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel2]</group>
+                <key>TheNextBeatSX1.container.d2TempoMinus.input</key>
+                <description>Deck 2 Tempo Minus (Small / Big)</description>
+                <status>0x90</status>
+                <midino>0x56</midino>
                 <options>
                     <script-binding/>
                 </options>
