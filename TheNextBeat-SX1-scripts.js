@@ -5,6 +5,12 @@ var TheNextBeatSX1 = {
     folderExpandedState: false
 };
 
+//NEW! NOW HAVING SYSEXXXY MESSAGES
+// Add these SysEx byte arrays to the top of your script
+// TheNextBeatSX1.SYSEX_IDENTITY_REQ_ALL = [0xF0, 0x7E, 0x7F, 0x06, 0x01, 0xF7];
+// TheNextBeatSX1.SYSEX_IDENTITY_REQ_DEV0 = [0xF0, 0x7E, 0x00, 0x06, 0x01, 0xF7];
+TheNextBeatSX1.SYSEX_INIT_NATIVE = [0xF0, 0x00, 0x20, 0x7F, 0x03, 0x01, 0xF7];
+
 TheNextBeatSX1.LED_COLOR = {
     OFF: 0x00,
     WHITE: 0x7F,
@@ -472,6 +478,14 @@ TheNextBeatSX1.updateLayers = function () {
 
 // Controller Init & Container Setup
 TheNextBeatSX1.init = function () {
+
+    // Send SysEx initialization commands
+    // midi.sendSysexMsg(TheNextBeatSX1.SYSEX_IDENTITY_REQ_ALL, TheNextBeatSX1.SYSEX_IDENTITY_REQ_ALL.length);
+    // midi.sendSysexMsg(TheNextBeatSX1.SYSEX_IDENTITY_REQ_DEV0, TheNextBeatSX1.SYSEX_IDENTITY_REQ_DEV0.length);
+    midi.sendSysexMsg(TheNextBeatSX1.SYSEX_INIT_NATIVE, TheNextBeatSX1.SYSEX_INIT_NATIVE.length);
+
+    // Continue with your component container setup...
+
     TheNextBeatSX1.container = new components.ComponentContainer();
 
     // Deck 1 Components
@@ -549,10 +563,17 @@ TheNextBeatSX1.init = function () {
     TheNextBeatSX1.onLoopEnabledChanged(engine.getValue('[Channel1]', 'loop_enabled'), '[Channel1]', 'loop_enabled');
     TheNextBeatSX1.onLoopEnabledChanged(engine.getValue('[Channel2]', 'loop_enabled'), '[Channel2]', 'loop_enabled');
 
-    engine.setValue('[Channel1]', 'volume', 0.5);
-    engine.setValue('[Channel2]', 'volume', 0.5);
+    // engine.setValue('[Channel1]', 'volume', 0.5);
+    // engine.setValue('[Channel2]', 'volume', 0.5);
     engine.softTakeover('[Channel1]', 'volume', true);
     engine.softTakeover('[Channel2]', 'volume', true);
+
+        // Send SysEx initialization commands
+    // midi.sendSysexMsg(TheNextBeatSX1.SYSEX_IDENTITY_REQ_ALL, TheNextBeatSX1.SYSEX_IDENTITY_REQ_ALL.length);
+    // midi.sendSysexMsg(TheNextBeatSX1.SYSEX_IDENTITY_REQ_DEV0, TheNextBeatSX1.SYSEX_IDENTITY_REQ_DEV0.length);
+    midi.sendSysexMsg(TheNextBeatSX1.SYSEX_INIT_NATIVE, TheNextBeatSX1.SYSEX_INIT_NATIVE.length);
+
+    // Continue with your component container setup...
 };
 
 // Shutdown Cleanup
