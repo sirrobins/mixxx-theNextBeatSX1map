@@ -5,11 +5,7 @@ var TheNextBeatSX1 = {
     folderExpandedState: false
 };
 
-//NEW! NOW HAVING SYSEXXXY MESSAGES
-// Add these SysEx byte arrays to the top of your script
-// TheNextBeatSX1.SYSEX_IDENTITY_REQ_ALL = [0xF0, 0x7E, 0x7F, 0x06, 0x01, 0xF7];
-// TheNextBeatSX1.SYSEX_IDENTITY_REQ_DEV0 = [0xF0, 0x7E, 0x00, 0x06, 0x01, 0xF7];
-// TheNextBeatSX1.SYSEX_INIT_NATIVE = [0xF0, 0x00, 0x20, 0x7F, 0x03, 0x01, 0xF7];
+
 
 // reverse-engineered init tweak
 // --- DJ Exact Hardware Initialization Sequence ---
@@ -55,6 +51,7 @@ TheNextBeatSX1.eqSoftTakeover = {
 };
 
 // --- Auto-Repeat Handler for Default Tempo Buttons ---
+// When tempo +/- is long-pressed action is repeated in an accelerate manner.
 TheNextBeatSX1.tempoRepeatState = {};
 
 TheNextBeatSX1.handleTempoPress = function (channel, control, value, status, group) {
@@ -94,6 +91,7 @@ TheNextBeatSX1.handleTempoPress = function (channel, control, value, status, gro
 };
 
 // High / Mid Dual Function Knob Handler
+// SX1 has no physicak knob for mid eq control. shift1(green) + high eq is connected to MidEQ on Mixxx.
 TheNextBeatSX1.eqHighKnob = function (channel, control, value, status, group) {
     var deckNum = (control === 0x11 || group.indexOf('Channel2') !== -1 || group.indexOf('2') !== -1) ? 2 : 1;
     var targetGroup = (deckNum === 1) ? '[EqualizerRack1_[Channel1]_Effect1]' : '[EqualizerRack1_[Channel2]_Effect1]';
@@ -148,6 +146,7 @@ TheNextBeatSX1.toggleScratchMode = function (channel, control, value, status, gr
 };
 
 // --- BPM Equalizer LED Checker for Sync Buttons ---
+// This function makes sync button led to on when bpms in deck1/deck2 are close to equal value. Some difference is allowed.
 TheNextBeatSX1.updateSyncLEDs = function () {
     var bpm1 = engine.getValue('[Channel1]', 'bpm');
     var bpm2 = engine.getValue('[Channel2]', 'bpm');
@@ -167,6 +166,7 @@ TheNextBeatSX1.updateSyncLEDs = function () {
 };
 
 // --- Loop LED Blinking State Tracker ---
+// This provides auto-loop button led blinking when on active loop.
 TheNextBeatSX1.loopBlinkState = {
     1: { timerId: 0, ledState: false, midiNo: 0x51 },
     2: { timerId: 0, ledState: false, midiNo: 0x0C }
@@ -213,6 +213,8 @@ TheNextBeatSX1.libraryScroll = function (channel, control, value, status, group)
 };
 
 // --- HeadMix Cue/Master Toggle Switch & Expand/Collapse Handler ---
+// SX1 has a Master HeadMix button, but in Mixxx software we have a Pot control. 
+// Button has ben set to switch  0% / 100% values.
 TheNextBeatSX1.headMixButton = function (channel, control, value, status, group) {
     if (value > 0) {
         if (TheNextBeatSX1.shift1Active) {
@@ -243,7 +245,7 @@ TheNextBeatSX1.onTrackLoaded = function (value, group, key) {
     }
 };
 
-// 1. Layer Definitions matching table.csv
+// 1. Layer Definitions. default (unshifted), shift1 (shift1/green), and blue (shift2/blue)
 TheNextBeatSX1.layers = {
     deck1: {
         autoLoop: {
@@ -380,6 +382,7 @@ TheNextBeatSX1.scratchSettings = {
     beta: (1.0 / 8.0) / 32
 };
 
+// Previous jogwheel implementation.
 /* TheNextBeatSX1.jogWheelTurn = function (channel, control, value, status, group) {
     var deckNum = (group === '[Channel1]') ? 1 : 2;
     var delta = (value < 64) ? value : value - 128;
@@ -400,6 +403,10 @@ TheNextBeatSX1.scratchSettings = {
 }; */
 
 // --- Jog Wheel Turn Handler (Deck 1 & Deck 2) ---
+// Map is meant to follow hardware basic design.
+// Unshifted: picth bend or scratch depending on Vynil mode on/off.
+// Shift1(green) + jog turn is fast seek/search.
+// Shift2(blue) + jog turn is an extra feature: ramp/accelerated pitch bend.
 TheNextBeatSX1.jogWheelTurn = function (channel, control, value, status, group) {
     var deckNum = (group === '[Channel1]') ? 1 : 2;
     var delta = (value < 64) ? value : value - 128; // Parse 2's complement relative delta
@@ -413,13 +420,34 @@ TheNextBeatSX1.jogWheelTurn = function (channel, control, value, status, group) 
         return;
     }
 
-    // --- 2. SHIFT 2 (BLUE) ACTIVE: TEMPORARY PITCH BEND (WAVEFORM RIGHT-CLICK DRAG) ---
-    if (TheNextBeatSX1.shift2Active) {
-        // Adjust the 0.5 multiplier if you want stronger/weaker pitch nudging while holding Shift 2
-        var pitchBendSensitivity = 1.1;
-        engine.setValue(group, 'jog', delta * pitchBendSensitivity);
-        return;
+// --- 2. SHIFT 2 (BLUE) ACTIVE: ACCELERATED JOG PITCH BEND ---
+// --- Shift 2 (Blue) Accelerated & Reverse-Capable Jog Handler ---
+if (TheNextBeatSX1.shift2Active) {
+    var absDelta = Math.abs(delta);
+    
+    // --- ADJUSTABLE PARAMETERS ---
+    //     Tuning Guide:
+    // If slow turns are still too sensitive: Increase exponent to 2.8 or 3.0.
+    // If fast spins don't reach enough speed/reverse: Increase baseMultiplier (e.g., to 2.0 or 3.0).
+    var exponent = 5.5;           // Higher exponent (2.5) flattens slow turns for fine precision & steepens fast spins (default 2.5)
+    var baseMultiplier = 8.00;    // Scaled multiplier to work with higher exponent growth (1.25)
+    var backspinThreshold = 10;   // Minimum CCW speed to trigger negative/backward playback
+    var backspinIntensity = 2.5;  // Multiplier to force strong negative jog momentum on fast backspins
+    
+    // Calculate non-linear accelerated speed curve
+    var speedMultiplier = Math.pow(absDelta, exponent) * baseMultiplier;
+    var acceleratedJog = (delta > 0 ? 1 : -1) * speedMultiplier;
+
+    // Check for fast backward (counter-clockwise) spin
+    if (delta < 0 && absDelta >= backspinThreshold) {
+        // Ramps up negative jog input to force negative playback speed
+        acceleratedJog = -Math.pow(absDelta, exponent) * backspinIntensity;
     }
+
+    engine.setValue(group, 'jog', acceleratedJog);
+    return;
+}
+
 
     // --- 3. STANDARD LAYER: SCRATCH OR RIM PITCH BEND ---
     if (engine.isScratching(deckNum)) {
@@ -459,7 +487,9 @@ TheNextBeatSX1.jogTouch2 = function (channel, control, value, status, group) {
     }
 };
 
-// 2. Custom LayerButton supporting Toggles (Play/Pause)
+// 2. Custom LayerButton.
+//  It is developed supporting Toggles (Play/Pause, Pre-fader Listening PFL, Vynil/slip mode, sync, and Effects)
+// Early versions suffer from losing toggle status when changing layers when pushing shift1/shift2.
 TheNextBeatSX1.LayerButton = class extends components.Button {
     constructor(options) {
         super(options);
@@ -474,7 +504,7 @@ TheNextBeatSX1.LayerButton = class extends components.Button {
         var layerConfig = this.layers[layerName] || this.layers.default;
         if (!layerConfig) return;
 
-        // Added 'enabled' to prevent clearing effect toggles on layer switch
+        // Added 'enabled' to prevent clearing Effects toggles on layer switch
         var persistentKeys = ['play', 'pfl', 'slip_enabled', 'sync_enabled', 'enabled'];
         if (this.inKey && this.group && persistentKeys.indexOf(this.inKey) === -1) {
             engine.setValue(this.group, this.inKey, 0);
@@ -541,17 +571,20 @@ TheNextBeatSX1.updateLayers = function () {
 // Controller Init & Container Setup
 TheNextBeatSX1.init = function () {
 
-    // Send SysEx initialization commands
-    // midi.sendSysexMsg(TheNextBeatSX1.SYSEX_IDENTITY_REQ_ALL, TheNextBeatSX1.SYSEX_IDENTITY_REQ_ALL.length);
-    // midi.sendSysexMsg(TheNextBeatSX1.SYSEX_IDENTITY_REQ_DEV0, TheNextBeatSX1.SYSEX_IDENTITY_REQ_DEV0.length);
-    // midi.sendSysexMsg(TheNextBeatSX1.SYSEX_INIT_NATIVE, TheNextBeatSX1.SYSEX_INIT_NATIVE.length);
+
 
     // Continue with your component container setup...
 
-    // 2. Fire DJ 22-Packet LED Burst & Analog ADC Dump Trigger
+    // Fire DJ 22-Packet LED Burst & Analog ADC Dump Trigger
+    // an attempt to get initial faders and knobs status on startup. It does not work :(
     TheNextBeatSX1.sendInitSequence();
 
+    // Container is used to manage shift1 green and shift2 blue alternate functions as layers, following component.js approach.
     TheNextBeatSX1.container = new components.ComponentContainer();
+
+    // SX1 midi map has no offset rule for channel1/channel2 midi controls
+    // For this reason, deck 1 and deck 2 midi mapping is defined  independently .
+    // All controls/buttons are defined as container properties so their functions can be managed by shifting/changing layer.
 
     // Deck 1 Components
     TheNextBeatSX1.container.d1AutoLoop = new TheNextBeatSX1.LayerButton({ midi: [0x90, 0x51], layers: TheNextBeatSX1.layers.deck1.autoLoop });
@@ -628,22 +661,19 @@ TheNextBeatSX1.init = function () {
     TheNextBeatSX1.onLoopEnabledChanged(engine.getValue('[Channel1]', 'loop_enabled'), '[Channel1]', 'loop_enabled');
     TheNextBeatSX1.onLoopEnabledChanged(engine.getValue('[Channel2]', 'loop_enabled'), '[Channel2]', 'loop_enabled');
 
+    // Uncomment following 2 lines if you prefer volume at middle position on startup. (no initial knob status is available for mixxx)
     // engine.setValue('[Channel1]', 'volume', 0.5);
     // engine.setValue('[Channel2]', 'volume', 0.5);
     engine.softTakeover('[Channel1]', 'volume', true);
     engine.softTakeover('[Channel2]', 'volume', true);
 
-        // Send SysEx initialization commands
-    // midi.sendSysexMsg(TheNextBeatSX1.SYSEX_IDENTITY_REQ_ALL, TheNextBeatSX1.SYSEX_IDENTITY_REQ_ALL.length);
-    // midi.sendSysexMsg(TheNextBeatSX1.SYSEX_IDENTITY_REQ_DEV0, TheNextBeatSX1.SYSEX_IDENTITY_REQ_DEV0.length);
-    // midi.sendSysexMsg(TheNextBeatSX1.SYSEX_INIT_NATIVE, TheNextBeatSX1.SYSEX_INIT_NATIVE.length);
 
-    // Continue with your component container setup...
 };
+
 
 // Shutdown Cleanup
 TheNextBeatSX1.shutdown = function () {
-    // Clear tempo repeat timers
+    // Clear tempo repeat timers (these timers are used for tempo long-press actions and autoloop blinking)
     for (var timerKey in TheNextBeatSX1.tempoRepeatState) {
         if (TheNextBeatSX1.tempoRepeatState[timerKey]) {
             engine.stopTimer(TheNextBeatSX1.tempoRepeatState[timerKey]);
