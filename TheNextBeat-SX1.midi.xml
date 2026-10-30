@@ -92,6 +92,16 @@
                     <script-binding/>
                 </options>
             </control>
+                        <control>
+                <group>[Channel2]</group>
+                <key>TheNextBeatSX1.container.d2AutoLoop.input</key>
+                <description>Deck 2 Auto Loop / HotCue 2 -unpress</description>
+                <status>0x80</status>
+                <midino>0x0C</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
             <control>
                 <group>[Master]</group>
                 <key>TheNextBeatSX1.headMixButton</key>
@@ -107,6 +117,16 @@
                 <key>TheNextBeatSX1.container.d2LoopDouble.input</key>
                 <description>Deck 2 Loop Double / HotCue 1</description>
                 <status>0x90</status>
+                <midino>0x0E</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+                        <control>
+                <group>[Channel2]</group>
+                <key>TheNextBeatSX1.container.d2LoopDouble.input</key>
+                <description>Deck 2 Loop Double / HotCue 1 -unpress</description>
+                <status>0x80</status>
                 <midino>0x0E</midino>
                 <options>
                     <script-binding/>
@@ -462,11 +482,31 @@
                     <script-binding/>
                 </options>
             </control>
+                        <control>
+                <group>[Channel1]</group>
+                <key>TheNextBeatSX1.container.d1LoopDouble.input</key>
+                <description>Deck 1 Loop Double / HotCue 1 -unpress</description>
+                <status>0x80</status>
+                <midino>0x50</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
             <control>
                 <group>[Channel1]</group>
                 <key>TheNextBeatSX1.container.d1AutoLoop.input</key>
                 <description>Deck 1 Auto Loop / HotCue 2</description>
                 <status>0x90</status>
+                <midino>0x51</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+                        <control>
+                <group>[Channel1]</group>
+                <key>TheNextBeatSX1.container.d1AutoLoop.input</key>
+                <description>Deck 1 Auto Loop / HotCue 2 -unpress</description>
+                <status>0x80</status>
                 <midino>0x51</midino>
                 <options>
                     <script-binding/>
@@ -562,11 +602,31 @@
                     <script-binding/>
                 </options>
             </control>
+                        <control>
+                <group>[Channel1]</group>
+                <key>TheNextBeatSX1.container.d1LoopHalve.input</key>
+                <description>Deck 1 Loop Halve / HotCue 3 -unpress</description>
+                <status>0x80</status>
+                <midino>0x64</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
             <control>
                 <group>[Channel2]</group>
                 <key>TheNextBeatSX1.container.d2LoopHalve.input</key>
                 <description>Deck 2 Loop Halve / HotCue 3</description>
                 <status>0x90</status>
+                <midino>0x65</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+                        <control>
+                <group>[Channel2]</group>
+                <key>TheNextBeatSX1.container.d2LoopHalve.input</key>
+                <description>Deck 2 Loop Halve / HotCue 3 -unpress</description>
+                <status>0x80</status>
                 <midino>0x65</midino>
                 <options>
                     <script-binding/>

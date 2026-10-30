@@ -23,7 +23,7 @@ TheNextBeatSX1.eqSoftTakeover = {
     2: { activeTarget: 'parameter3', synced: true }
 };
 
-// --- Auto-Repeat Handler for Tempo Buttons ---
+// --- Auto-Repeat Handler for Default Tempo Buttons ---
 TheNextBeatSX1.tempoRepeatState = {};
 
 TheNextBeatSX1.handleTempoPress = function (channel, control, value, status, group) {
@@ -43,8 +43,7 @@ TheNextBeatSX1.handleTempoPress = function (channel, control, value, status, gro
             engine.stopTimer(TheNextBeatSX1.tempoRepeatState[key]);
         }
 
-        // Start auto-repeat timer (Delay 300ms before repeat, repeat every 100ms)
-        var autoRepeatTimer = 0;
+        // Delay 300ms before starting repeat loop, then repeat every 100ms
         TheNextBeatSX1.tempoRepeatState[key] = engine.beginTimer(300, function () {
             engine.setValue(group, targetKey, 1);
             
@@ -65,7 +64,6 @@ TheNextBeatSX1.handleTempoPress = function (channel, control, value, status, gro
 
 // High / Mid Dual Function Knob Handler
 TheNextBeatSX1.eqHighKnob = function (channel, control, value, status, group) {
-    // Determine deck number directly from MIDI control number: 0x10 = Deck 1, 0x11 = Deck 2
     var deckNum = (control === 0x11 || group.indexOf('Channel2') !== -1 || group.indexOf('2') !== -1) ? 2 : 1;
     var targetGroup = (deckNum === 1) ? '[EqualizerRack1_[Channel1]_Effect1]' : '[EqualizerRack1_[Channel2]_Effect1]';
 
@@ -123,19 +121,16 @@ TheNextBeatSX1.updateSyncLEDs = function () {
     var bpm1 = engine.getValue('[Channel1]', 'bpm');
     var bpm2 = engine.getValue('[Channel2]', 'bpm');
 
-    // Prevent matching 0 BPM (unloaded tracks)
     if (bpm1 > 0 && bpm2 > 0) {
         var diffRatio = Math.abs(bpm1 - bpm2) / Math.max(bpm1, bpm2);
         
-        // 1% Margin Check (<= 0.01)
         if (diffRatio <= 0.01) {
-            midi.sendShortMsg(0x90, 0x44, 0x7F); // Deck 1 Sync LED ON
-            midi.sendShortMsg(0x90, 0x46, 0x7F); // Deck 2 Sync LED ON
+            midi.sendShortMsg(0x90, 0x44, 0x7F);
+            midi.sendShortMsg(0x90, 0x46, 0x7F);
             return;
         }
     }
 
-    // Default to Off if outside 1% margin or tracks not playing/loaded
     midi.sendShortMsg(0x90, 0x44, 0x00);
     midi.sendShortMsg(0x90, 0x46, 0x00);
 };
@@ -227,7 +222,8 @@ TheNextBeatSX1.layers = {
         },
         cue: {
             default: { group: '[Channel1]', inKey: 'cue_default', outKey: 'cue_indicator' },
-            shift1:  { group: '[Channel1]', inKey: 'cue_gotoandstop', outKey: 'cue_indicator' }
+            shift1:  { group: '[Channel1]', inKey: 'cue_gotoandstop', outKey: 'cue_indicator' },
+            blue:  { group: '[Channel1]', inKey: 'cue_gotoandplay', outKey: 'cue_indicator' }
         },
         fxOnOff: {
             default: { group: '[EffectRack1_EffectUnit1_Effect1]', inKey: 'enabled', outKey: 'enabled', type: 1 }
@@ -256,18 +252,21 @@ TheNextBeatSX1.layers = {
         },
         play: {
             default: { group: '[Channel1]', inKey: 'play', outKey: 'play_indicator', type: 1 },
-            shift1:  { group: '[Channel1]', inKey: 'start_play', outKey: 'play_indicator', type: 0 }
+            shift1:  { group: '[Channel1]', inKey: 'play', outKey: 'play_indicator', type: 1 },
+            blue:  { group: '[Channel1]', inKey: 'start_stop', outKey: 'play_indicator', type: 0 }
         },
         sync: {
             default: { group: '[Channel1]', inKey: 'sync_enabled' }
         },
         tempoMinus: {
             default: { group: '[Channel1]', inKey: 'rate_perm_down_small', input: TheNextBeatSX1.handleTempoPress },
-            shift1:  { group: '[Channel1]', inKey: 'rate_perm_down' }
+            shift1:  { group: '[Channel1]', inKey: 'rate_perm_down' },
+            blue:    { group: '[Channel1]', inKey: 'beatjump_backward' }
         },
         tempoPlus: {
             default: { group: '[Channel1]', inKey: 'rate_perm_up_small', input: TheNextBeatSX1.handleTempoPress },
-            shift1:  { group: '[Channel1]', inKey: 'rate_perm_up' }
+            shift1:  { group: '[Channel1]', inKey: 'rate_perm_up' },
+            blue:    { group: '[Channel1]', inKey: 'beatjump_forward' }
         },
         vinyl: {
             default: { group: '[Channel1]', input: TheNextBeatSX1.toggleScratchMode },
@@ -283,7 +282,9 @@ TheNextBeatSX1.layers = {
         },
         cue: {
             default: { group: '[Channel2]', inKey: 'cue_default', outKey: 'cue_indicator' },
-            shift1:  { group: '[Channel2]', inKey: 'cue_gotoandstop', outKey: 'cue_indicator' }
+            shift1:  { group: '[Channel2]', inKey: 'cue_gotoandstop', outKey: 'cue_indicator' },
+            blue:  { group: '[Channel2]', inKey: 'cue_gotoandplay', outKey: 'cue_indicator' }
+            
         },
         fxOnOff: {
             default: { group: '[EffectRack1_EffectUnit2_Effect1]', inKey: 'enabled', outKey: 'enabled', type: 1 }
@@ -312,18 +313,21 @@ TheNextBeatSX1.layers = {
         },
         play: {
             default: { group: '[Channel2]', inKey: 'play', outKey: 'play_indicator', type: 1 },
-            shift1:  { group: '[Channel2]', inKey: 'start_play', outKey: 'play_indicator', type: 0 }
+            shift1:  { group: '[Channel2]', inKey: 'play', outKey: 'play_indicator', type: 1 },
+            blue:  { group: '[Channel2]', inKey: 'start_stop', outKey: 'play_indicator', type: 0 }
         },
         sync: {
             default: { group: '[Channel2]', inKey: 'sync_enabled' }
         },
         tempoMinus: {
             default: { group: '[Channel2]', inKey: 'rate_perm_down_small', input: TheNextBeatSX1.handleTempoPress },
-            shift1:  { group: '[Channel2]', inKey: 'rate_perm_down' }
+            shift1:  { group: '[Channel2]', inKey: 'rate_perm_down' },
+            blue:    { group: '[Channel2]', inKey: 'beatjump_backward' }
         },
         tempoPlus: {
             default: { group: '[Channel2]', inKey: 'rate_perm_up_small', input: TheNextBeatSX1.handleTempoPress },
-            shift1:  { group: '[Channel2]', inKey: 'rate_perm_up' }
+            shift1:  { group: '[Channel2]', inKey: 'rate_perm_up' },
+            blue:    { group: '[Channel2]', inKey: 'beatjump_forward' }
         },
         vinyl: {
             default: { group: '[Channel2]', input: TheNextBeatSX1.toggleScratchMode },
@@ -347,7 +351,7 @@ TheNextBeatSX1.jogWheelTurn = function (channel, control, value, status, group) 
 
     if (TheNextBeatSX1.shift1Active) {
         var currentPos = engine.getValue(group, 'playposition');
-        var seekStep = delta * 0.005;
+        var seekStep = delta * 0.002;  // INCREASE/DECREASE 0.005 FOR SEARCH SENSIBILITY TUNNING.
         var newPos = Math.max(0.0, Math.min(1.0, currentPos + seekStep));
         engine.setValue(group, 'playposition', newPos);
         return;
@@ -356,7 +360,7 @@ TheNextBeatSX1.jogWheelTurn = function (channel, control, value, status, group) 
     if (engine.isScratching(deckNum)) {
         engine.scratchTick(deckNum, delta);
     } else {
-        engine.setValue(group, 'jog', delta * 0.3);
+        engine.setValue(group, 'jog', delta * 0.3); // INCREASE/DECREASE 0.3 TO CHANGE JOG SENSIBILITY
     }
 };
 
@@ -439,7 +443,6 @@ TheNextBeatSX1.LayerButton = class extends components.Button {
         }
     }
 
-    // Custom LED sender to force Green (0x3F) on Hotcues
     send(value) {
         var isHotcue = this.inKey && this.inKey.indexOf('hotcue_') !== -1;
         
