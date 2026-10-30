@@ -10,6 +10,7 @@
             <file filename="TheNextBeat-SX1-scripts.js" functionprefix="TheNextBeatSX1"/>
         </scriptfiles>
         <controls>
+        <controls>
 
 
         <!-- ================= LIBRARY TRACK SCROLL ENCODER (0x1A) ================= -->
