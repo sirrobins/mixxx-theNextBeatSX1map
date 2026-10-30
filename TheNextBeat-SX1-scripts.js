@@ -9,7 +9,32 @@ var TheNextBeatSX1 = {
 // Add these SysEx byte arrays to the top of your script
 // TheNextBeatSX1.SYSEX_IDENTITY_REQ_ALL = [0xF0, 0x7E, 0x7F, 0x06, 0x01, 0xF7];
 // TheNextBeatSX1.SYSEX_IDENTITY_REQ_DEV0 = [0xF0, 0x7E, 0x00, 0x06, 0x01, 0xF7];
-TheNextBeatSX1.SYSEX_INIT_NATIVE = [0xF0, 0x00, 0x20, 0x7F, 0x03, 0x01, 0xF7];
+// TheNextBeatSX1.SYSEX_INIT_NATIVE = [0xF0, 0x00, 0x20, 0x7F, 0x03, 0x01, 0xF7];
+
+// reverse-engineered init tweak
+// --- DJ Exact Hardware Initialization Sequence ---
+TheNextBeatSX1.INIT_PACKETS = [
+    [0x9F, 0x3F, 0x7F] // Master Handshake
+ 
+];
+
+TheNextBeatSX1.sendInitSequence = function () {
+    var packets = TheNextBeatSX1.INIT_PACKETS;
+    var index = 0;
+
+    // Send 1 packets with a 10ms interval to prevent buffer overflow
+    var initTimer = engine.beginTimer(10, function () {
+        if (index < packets.length) {
+            var packet = packets[index];
+            midi.sendShortMsg(packet[0], packet[1], packet[2]);
+            index++;
+        } else {
+            engine.stopTimer(initTimer);
+        }
+    });
+};
+
+
 
 TheNextBeatSX1.LED_COLOR = {
     OFF: 0x00,
@@ -232,7 +257,9 @@ TheNextBeatSX1.layers = {
             blue:  { group: '[Channel1]', inKey: 'cue_gotoandplay', outKey: 'cue_indicator' }
         },
         fxOnOff: {
-            default: { group: '[EffectRack1_EffectUnit1_Effect1]', inKey: 'enabled', outKey: 'enabled', type: 1 }
+            default: { group: '[EffectRack1_EffectUnit1_Effect1]', inKey: 'enabled', outKey: 'enabled', type: 1 },
+            shift1:  { group: '[EffectRack1_EffectUnit1_Effect1]', inKey: 'enabled', outKey: 'enabled', type: 1 },
+            blue:    { group: '[EffectRack1_EffectUnit1_Effect1]', inKey: 'enabled', outKey: 'enabled', type: 1 }
         },
         jogTouch: {
             default: { group: '[Channel1]', inKey: 'wheel' }
@@ -289,11 +316,13 @@ TheNextBeatSX1.layers = {
         cue: {
             default: { group: '[Channel2]', inKey: 'cue_default', outKey: 'cue_indicator' },
             shift1:  { group: '[Channel2]', inKey: 'cue_gotoandstop', outKey: 'cue_indicator' },
-            blue:  { group: '[Channel2]', inKey: 'cue_gotoandplay', outKey: 'cue_indicator' }
+            blue:    { group: '[Channel2]', inKey: 'cue_gotoandplay', outKey: 'cue_indicator' }
             
         },
         fxOnOff: {
-            default: { group: '[EffectRack1_EffectUnit2_Effect1]', inKey: 'enabled', outKey: 'enabled', type: 1 }
+            default: { group: '[EffectRack1_EffectUnit2_Effect1]', inKey: 'enabled', outKey: 'enabled', type: 1 },
+            shift1:  { group: '[EffectRack1_EffectUnit2_Effect1]', inKey: 'enabled', outKey: 'enabled', type: 1 },
+            blue:    { group: '[EffectRack1_EffectUnit2_Effect1]', inKey: 'enabled', outKey: 'enabled', type: 1 }
         },
         jogTouch: {
             default: { group: '[Channel2]', inKey: 'wheel' }
@@ -351,7 +380,7 @@ TheNextBeatSX1.scratchSettings = {
     beta: (1.0 / 8.0) / 32
 };
 
-TheNextBeatSX1.jogWheelTurn = function (channel, control, value, status, group) {
+/* TheNextBeatSX1.jogWheelTurn = function (channel, control, value, status, group) {
     var deckNum = (group === '[Channel1]') ? 1 : 2;
     var delta = (value < 64) ? value : value - 128;
 
@@ -367,6 +396,38 @@ TheNextBeatSX1.jogWheelTurn = function (channel, control, value, status, group) 
         engine.scratchTick(deckNum, delta);
     } else {
         engine.setValue(group, 'jog', delta * 0.3); // INCREASE/DECREASE 0.3 TO CHANGE JOG SENSIBILITY
+    }
+}; */
+
+// --- Jog Wheel Turn Handler (Deck 1 & Deck 2) ---
+TheNextBeatSX1.jogWheelTurn = function (channel, control, value, status, group) {
+    var deckNum = (group === '[Channel1]') ? 1 : 2;
+    var delta = (value < 64) ? value : value - 128; // Parse 2's complement relative delta
+
+    // --- 1. SHIFT 1 (GREEN) ACTIVE: HIGH-SPEED TRACK SEEK ---
+    if (TheNextBeatSX1.shift1Active) {
+        var currentPos = engine.getValue(group, 'playposition');
+        var seekStep = delta * 0.002; // Track position scrubbing speed // INCREASE/DECREASE 0.005 FOR SEARCH SENSIBILITY TUNNING.
+        var newPos = Math.max(0.0, Math.min(1.0, currentPos + seekStep));
+        engine.setValue(group, 'playposition', newPos);
+        return;
+    }
+
+    // --- 2. SHIFT 2 (BLUE) ACTIVE: TEMPORARY PITCH BEND (WAVEFORM RIGHT-CLICK DRAG) ---
+    if (TheNextBeatSX1.shift2Active) {
+        // Adjust the 0.5 multiplier if you want stronger/weaker pitch nudging while holding Shift 2
+        var pitchBendSensitivity = 1.1;
+        engine.setValue(group, 'jog', delta * pitchBendSensitivity);
+        return;
+    }
+
+    // --- 3. STANDARD LAYER: SCRATCH OR RIM PITCH BEND ---
+    if (engine.isScratching(deckNum)) {
+        // Platter touched while Vinyl mode is ON
+        engine.scratchTick(deckNum, delta);
+    } else {
+        // Untouched platter / Rim turn pitch bend
+        engine.setValue(group, 'jog', delta * 0.3);
     }
 };
 
@@ -413,7 +474,8 @@ TheNextBeatSX1.LayerButton = class extends components.Button {
         var layerConfig = this.layers[layerName] || this.layers.default;
         if (!layerConfig) return;
 
-        var persistentKeys = ['play', 'pfl', 'slip_enabled', 'sync_enabled'];
+        // Added 'enabled' to prevent clearing effect toggles on layer switch
+        var persistentKeys = ['play', 'pfl', 'slip_enabled', 'sync_enabled', 'enabled'];
         if (this.inKey && this.group && persistentKeys.indexOf(this.inKey) === -1) {
             engine.setValue(this.group, this.inKey, 0);
         }
@@ -482,9 +544,12 @@ TheNextBeatSX1.init = function () {
     // Send SysEx initialization commands
     // midi.sendSysexMsg(TheNextBeatSX1.SYSEX_IDENTITY_REQ_ALL, TheNextBeatSX1.SYSEX_IDENTITY_REQ_ALL.length);
     // midi.sendSysexMsg(TheNextBeatSX1.SYSEX_IDENTITY_REQ_DEV0, TheNextBeatSX1.SYSEX_IDENTITY_REQ_DEV0.length);
-    midi.sendSysexMsg(TheNextBeatSX1.SYSEX_INIT_NATIVE, TheNextBeatSX1.SYSEX_INIT_NATIVE.length);
+    // midi.sendSysexMsg(TheNextBeatSX1.SYSEX_INIT_NATIVE, TheNextBeatSX1.SYSEX_INIT_NATIVE.length);
 
     // Continue with your component container setup...
+
+    // 2. Fire DJ 22-Packet LED Burst & Analog ADC Dump Trigger
+    TheNextBeatSX1.sendInitSequence();
 
     TheNextBeatSX1.container = new components.ComponentContainer();
 
@@ -571,7 +636,7 @@ TheNextBeatSX1.init = function () {
         // Send SysEx initialization commands
     // midi.sendSysexMsg(TheNextBeatSX1.SYSEX_IDENTITY_REQ_ALL, TheNextBeatSX1.SYSEX_IDENTITY_REQ_ALL.length);
     // midi.sendSysexMsg(TheNextBeatSX1.SYSEX_IDENTITY_REQ_DEV0, TheNextBeatSX1.SYSEX_IDENTITY_REQ_DEV0.length);
-    midi.sendSysexMsg(TheNextBeatSX1.SYSEX_INIT_NATIVE, TheNextBeatSX1.SYSEX_INIT_NATIVE.length);
+    // midi.sendSysexMsg(TheNextBeatSX1.SYSEX_INIT_NATIVE, TheNextBeatSX1.SYSEX_INIT_NATIVE.length);
 
     // Continue with your component container setup...
 };
