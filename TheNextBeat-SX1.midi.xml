@@ -10,7 +10,6 @@
             <file filename="TheNextBeat-SX1-scripts.js" functionprefix="TheNextBeatSX1"/>
         </scriptfiles>
         <controls>
-        <controls>
 
 
         <!-- ================= LIBRARY TRACK SCROLL ENCODER (0x1A) ================= -->
@@ -485,9 +484,29 @@
             </control>
             <control>
                 <group>[Channel1]</group>
+                <key>TheNextBeatSX1.container.d1TempoPlus.input</key>
+                <description>Unpress Deck 1 Tempo Plus (Small / Big)</description>
+                <status>0x80</status>
+                <midino>0x53</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel1]</group>
                 <key>TheNextBeatSX1.container.d1TempoMinus.input</key>
                 <description>Deck 1 Tempo Minus (Small / Big)</description>
                 <status>0x90</status>
+                <midino>0x54</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+                        <control>
+                <group>[Channel1]</group>
+                <key>TheNextBeatSX1.container.d1TempoMinus.input</key>
+                <description>Unpress Deck 1 Tempo Minus (Small / Big)</description>
+                <status>0x80</status>
                 <midino>0x54</midino>
                 <options>
                     <script-binding/>
@@ -503,11 +522,31 @@
                     <script-binding/>
                 </options>
             </control>
+                        <control>
+                <group>[Channel2]</group>
+                <key>TheNextBeatSX1.container.d2TempoPlus.input</key>
+                <description>Unpress Deck 2 Tempo Plus (Small / Big)</description>
+                <status>0x80</status>
+                <midino>0x55</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
             <control>
                 <group>[Channel2]</group>
                 <key>TheNextBeatSX1.container.d2TempoMinus.input</key>
                 <description>Deck 2 Tempo Minus (Small / Big)</description>
                 <status>0x90</status>
+                <midino>0x56</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+                        <control>
+                <group>[Channel2]</group>
+                <key>TheNextBeatSX1.container.d2TempoMinus.input</key>
+                <description>Unpress Deck 2 Tempo Minus (Small / Big)</description>
+                <status>0x80</status>
                 <midino>0x56</midino>
                 <options>
                     <script-binding/>

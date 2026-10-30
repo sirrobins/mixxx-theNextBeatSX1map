@@ -5,11 +5,10 @@ var TheNextBeatSX1 = {
     folderExpandedState: false
 };
 
-
 TheNextBeatSX1.LED_COLOR = {
     OFF: 0x00,
     WHITE: 0x7F,
-    GREEN: 0x7f // MIDI value for Green on SX1 color spectrum
+    GREEN: 0x3F // Updated to 0x3F secondary color byte
 };
 
 // Track Vinyl / Scratch mode state per deck (default: false)
@@ -24,9 +23,50 @@ TheNextBeatSX1.eqSoftTakeover = {
     2: { activeTarget: 'parameter3', synced: true }
 };
 
+// --- Auto-Repeat Handler for Tempo Buttons ---
+TheNextBeatSX1.tempoRepeatState = {};
+
+TheNextBeatSX1.handleTempoPress = function (channel, control, value, status, group) {
+    var key = channel + "_" + control;
+    var isPress = (status === 0x90 && value > 0);
+
+    // Identify action based on group and active layer key
+    var isPlus = this.inKey.indexOf('up') !== -1;
+    var targetKey = isPlus ? 'rate_perm_up_small' : 'rate_perm_down_small';
+
+    if (isPress) {
+        // Trigger immediately on first press
+        engine.setValue(group, targetKey, 1);
+
+        // Clear any lingering timer for this button
+        if (TheNextBeatSX1.tempoRepeatState[key]) {
+            engine.stopTimer(TheNextBeatSX1.tempoRepeatState[key]);
+        }
+
+        // Start auto-repeat timer (Delay 300ms before repeat, repeat every 100ms)
+        var autoRepeatTimer = 0;
+        TheNextBeatSX1.tempoRepeatState[key] = engine.beginTimer(300, function () {
+            engine.setValue(group, targetKey, 1);
+            
+            // Speed up to continuous repeat rate after initial hold delay
+            engine.stopTimer(TheNextBeatSX1.tempoRepeatState[key]);
+            TheNextBeatSX1.tempoRepeatState[key] = engine.beginTimer(100, function () {
+                engine.setValue(group, targetKey, 1);
+            });
+        });
+    } else {
+        // Stop timer on release
+        if (TheNextBeatSX1.tempoRepeatState[key]) {
+            engine.stopTimer(TheNextBeatSX1.tempoRepeatState[key]);
+            delete TheNextBeatSX1.tempoRepeatState[key];
+        }
+    }
+};
+
 // High / Mid Dual Function Knob Handler
 TheNextBeatSX1.eqHighKnob = function (channel, control, value, status, group) {
-    var deckNum = (group.indexOf('Channel1') !== -1 || group.indexOf('1') !== -1) ? 1 : 2;
+    // Determine deck number directly from MIDI control number: 0x10 = Deck 1, 0x11 = Deck 2
+    var deckNum = (control === 0x11 || group.indexOf('Channel2') !== -1 || group.indexOf('2') !== -1) ? 2 : 1;
     var targetGroup = (deckNum === 1) ? '[EqualizerRack1_[Channel1]_Effect1]' : '[EqualizerRack1_[Channel2]_Effect1]';
 
     var physicalValue;
@@ -76,6 +116,28 @@ TheNextBeatSX1.toggleScratchMode = function (channel, control, value, status, gr
             engine.scratchDisable(deckNum);
         }
     }
+};
+
+// --- BPM Equalizer LED Checker for Sync Buttons ---
+TheNextBeatSX1.updateSyncLEDs = function () {
+    var bpm1 = engine.getValue('[Channel1]', 'bpm');
+    var bpm2 = engine.getValue('[Channel2]', 'bpm');
+
+    // Prevent matching 0 BPM (unloaded tracks)
+    if (bpm1 > 0 && bpm2 > 0) {
+        var diffRatio = Math.abs(bpm1 - bpm2) / Math.max(bpm1, bpm2);
+        
+        // 1% Margin Check (<= 0.01)
+        if (diffRatio <= 0.01) {
+            midi.sendShortMsg(0x90, 0x44, 0x7F); // Deck 1 Sync LED ON
+            midi.sendShortMsg(0x90, 0x46, 0x7F); // Deck 2 Sync LED ON
+            return;
+        }
+    }
+
+    // Default to Off if outside 1% margin or tracks not playing/loaded
+    midi.sendShortMsg(0x90, 0x44, 0x00);
+    midi.sendShortMsg(0x90, 0x46, 0x00);
 };
 
 // --- Loop LED Blinking State Tracker ---
@@ -197,14 +259,14 @@ TheNextBeatSX1.layers = {
             shift1:  { group: '[Channel1]', inKey: 'start_play', outKey: 'play_indicator', type: 0 }
         },
         sync: {
-            default: { group: '[Channel1]', inKey: 'sync_enabled', outKey: 'sync_enabled' }
+            default: { group: '[Channel1]', inKey: 'sync_enabled' }
         },
         tempoMinus: {
-            default: { group: '[Channel1]', inKey: 'rate_perm_down_small' },
+            default: { group: '[Channel1]', inKey: 'rate_perm_down_small', input: TheNextBeatSX1.handleTempoPress },
             shift1:  { group: '[Channel1]', inKey: 'rate_perm_down' }
         },
         tempoPlus: {
-            default: { group: '[Channel1]', inKey: 'rate_perm_up_small' },
+            default: { group: '[Channel1]', inKey: 'rate_perm_up_small', input: TheNextBeatSX1.handleTempoPress },
             shift1:  { group: '[Channel1]', inKey: 'rate_perm_up' }
         },
         vinyl: {
@@ -253,14 +315,14 @@ TheNextBeatSX1.layers = {
             shift1:  { group: '[Channel2]', inKey: 'start_play', outKey: 'play_indicator', type: 0 }
         },
         sync: {
-            default: { group: '[Channel2]', inKey: 'sync_enabled', outKey: 'sync_enabled' }
+            default: { group: '[Channel2]', inKey: 'sync_enabled' }
         },
         tempoMinus: {
-            default: { group: '[Channel2]', inKey: 'rate_perm_down_small' },
+            default: { group: '[Channel2]', inKey: 'rate_perm_down_small', input: TheNextBeatSX1.handleTempoPress },
             shift1:  { group: '[Channel2]', inKey: 'rate_perm_down' }
         },
         tempoPlus: {
-            default: { group: '[Channel2]', inKey: 'rate_perm_up_small' },
+            default: { group: '[Channel2]', inKey: 'rate_perm_up_small', input: TheNextBeatSX1.handleTempoPress },
             shift1:  { group: '[Channel2]', inKey: 'rate_perm_up' }
         },
         vinyl: {
@@ -377,18 +439,16 @@ TheNextBeatSX1.LayerButton = class extends components.Button {
         }
     }
 
-        // Custom LED sender to force Green on Hotcues
-        send(value) {
-            var isHotcue = this.inKey && this.inKey.indexOf('hotcue_') !== -1;
-            
-            if (isHotcue && value > 0) {
-                // Send Green MIDI velocity instead of standard White (0x7F)
-                midi.sendShortMsg(this.midi[0], this.midi[1], TheNextBeatSX1.LED_COLOR.GREEN);
-            } else {
-                // Standard LED behavior for non-hotcue buttons
-                super.send(value);
-            }
+    // Custom LED sender to force Green (0x3F) on Hotcues
+    send(value) {
+        var isHotcue = this.inKey && this.inKey.indexOf('hotcue_') !== -1;
+        
+        if (isHotcue && value > 0) {
+            midi.sendShortMsg(this.midi[0], this.midi[1], TheNextBeatSX1.LED_COLOR.GREEN);
+        } else {
+            super.send(value);
         }
+    }
 };
 
 // Centralized Shift Layer Manager
@@ -478,6 +538,11 @@ TheNextBeatSX1.init = function () {
     engine.makeConnection('[Channel1]', 'loop_enabled', TheNextBeatSX1.onLoopEnabledChanged);
     engine.makeConnection('[Channel2]', 'loop_enabled', TheNextBeatSX1.onLoopEnabledChanged);
     
+    // Connect BPM monitoring to sync LEDs
+    engine.makeConnection('[Channel1]', 'bpm', TheNextBeatSX1.updateSyncLEDs);
+    engine.makeConnection('[Channel2]', 'bpm', TheNextBeatSX1.updateSyncLEDs);
+    TheNextBeatSX1.updateSyncLEDs();
+
     TheNextBeatSX1.onLoopEnabledChanged(engine.getValue('[Channel1]', 'loop_enabled'), '[Channel1]', 'loop_enabled');
     TheNextBeatSX1.onLoopEnabledChanged(engine.getValue('[Channel2]', 'loop_enabled'), '[Channel2]', 'loop_enabled');
 
@@ -489,6 +554,13 @@ TheNextBeatSX1.init = function () {
 
 // Shutdown Cleanup
 TheNextBeatSX1.shutdown = function () {
+    // Clear tempo repeat timers
+    for (var timerKey in TheNextBeatSX1.tempoRepeatState) {
+        if (TheNextBeatSX1.tempoRepeatState[timerKey]) {
+            engine.stopTimer(TheNextBeatSX1.tempoRepeatState[timerKey]);
+        }
+    }
+
     if (TheNextBeatSX1.loopBlinkState[1].timerId !== 0) {
         engine.stopTimer(TheNextBeatSX1.loopBlinkState[1].timerId);
     }
@@ -500,6 +572,8 @@ TheNextBeatSX1.shutdown = function () {
     engine.makeConnection('[Channel2]', 'track_loaded', TheNextBeatSX1.onTrackLoaded, true);
     engine.makeConnection('[Channel1]', 'loop_enabled', TheNextBeatSX1.onLoopEnabledChanged, true);
     engine.makeConnection('[Channel2]', 'loop_enabled', TheNextBeatSX1.onLoopEnabledChanged, true);
+    engine.makeConnection('[Channel1]', 'bpm', TheNextBeatSX1.updateSyncLEDs, true);
+    engine.makeConnection('[Channel2]', 'bpm', TheNextBeatSX1.updateSyncLEDs, true);
     engine.makeConnection('[Master]', 'headMix', TheNextBeatSX1.headMixLEDCallback, true);
 
     if (TheNextBeatSX1.container) {
