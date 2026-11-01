@@ -2,12 +2,13 @@
 <MixxxControllerPreset mixxxVersion="2.6+" schemaVersion="1">
     <info>
         <name>TNB-SX1 Mixxx</name>
+        <author>sirrobins</author>
         <description>TheNextBeat SX1 MIDI mapping</description>
     </info>
     <controller id="TheNextBeatSX1">
         <scriptfiles>
             <file filename="midi-components-0.0.js" functionprefix=""/>
-            <file filename="TheNextBeat-SX1-scripts.js" functionprefix="TheNextBeatSX1"/>
+            <file filename="TheNextBeat-SX1.scripts.js" functionprefix="TheNextBeatSX1"/>
         </scriptfiles>
         <controls>
 
