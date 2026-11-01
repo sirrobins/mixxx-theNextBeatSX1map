@@ -1,5 +1,7 @@
 # Controller specs
 
+Manufacturer's product support:
+https://thenextbeat.dj/en/support/product-support/support-the-next-beat-by-tiesto-sx1
 
 English user manual:
 https://thenextbeat.dj/media/files/assets/sx1/manual/22401%20The%20Next%20Beat%20SX1_AW_IM_EN_V1R1_20231115.pdf
