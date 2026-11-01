@@ -1,4 +1,9 @@
 # Controller specs
+
+
+English user manual:
+https://thenextbeat.dj/media/files/assets/sx1/manual/22401%20The%20Next%20Beat%20SX1_AW_IM_EN_V1R1_20231115.pdf
+
 SX1 sends 0x90 for push and 0x80 status for all buttons in Deck A/B.
 A different midi control code is sent by each button.
 Shift button 1/2 does not change the midi control sent by the main button pressed.
